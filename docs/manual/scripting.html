@@ -110,6 +110,7 @@
       
     <li data-ice="manualNav" class="indent-h1" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html" data-ice="link">Custom questions</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#disabling-default-rendering" data-ice="link">Disabling default rendering</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#single-slider" data-ice="link">Single slider</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#implementation" data-ice="link">Implementation</a></li>
@@ -162,9 +163,11 @@
 </code></pre>
 <p>Example:
 you have multi with 5 answer, 3 should be selected. You want to change instruction to show remaining amount of answers. When 3 answers selected - navigate to next page.</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">currentQuestion.changeEvent.on(function (model){
+<pre><code class="lang-javascript"><code class="source-code prettyprint">currentQuestion.changeEvent.on(function (questionModel) {
+    var model = questionModel.model;
     var text = &apos;&apos;;
-    switch(model.values.length){
+
+    switch(model.values.length) {
         case 0:
             text = &apos;Please select 3 items&apos;;
             break;
@@ -178,6 +181,7 @@ you have multi with 5 answer, 3 should be selected. You want to change instructi
             Confirmit.page.next();
             return;
     }
+
     document.querySelector(`.cf-question#${model.id} .cf-question__instruction`).innerHTML = text;
 });</code>
 </code></pre>

@@ -6,7 +6,7 @@ export default class QuestionViewSettings {
      * @param {SurveyInfo} surveyInfo
      */
     constructor(surveyInfo) {
-        this._mobileThreshold = this._convertCssValueToPixelValue(surveyInfo.mobileThreshold);
+        this._mobileThreshold = parseInt(surveyInfo.mobileThreshold);
         this._disableKeyboardSupport = surveyInfo.surveyChannel === 'Cati';
         this._isAccessible = surveyInfo.isAccessible;
         this._messages = {
@@ -54,16 +54,5 @@ export default class QuestionViewSettings {
      */
     get messages() {
         return this._messages;
-    }
-
-    _convertCssValueToPixelValue(cssValue) {
-        const node = document.createElement('div');
-        node.style.boxSizing = 'border-box';
-        node.style.width = cssValue;
-        node.style.height = '0px';
-        document.body.appendChild(node);
-        const pixelValue = node.offsetWidth;
-        document.body.removeChild(node);
-        return pixelValue;
     }
 }

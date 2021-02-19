@@ -110,6 +110,7 @@
       
     <li data-ice="manualNav" class="indent-h1" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html" data-ice="link">Custom questions</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#disabling-default-rendering" data-ice="link">Disabling default rendering</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#single-slider" data-ice="link">Single slider</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#implementation" data-ice="link">Implementation</a></li>
@@ -152,37 +153,76 @@
   </div>
 </div></nav>
 <div class="content" data-ice="content">
-<div class="github-markdown" data-ice="content"><h1 id="custom-questions">Custom questions</h1><h2 id="overview">Overview</h2><p>In this article we&apos;ll create a couple of custom question experiences using external js libraries (jQueryUI, bootstrap), and describe a way to group them together generically.<br>We use a naming convention to distinguish between public and private methods and properties, use of private methods and properties is not supported. <strong>Methods and properties names starting with &#x201C;_&#x201D; are private and may be changed at any time without warning</strong> which could lead to unexpected behaviour or could prevent your survey from working.  </p>
+<div class="github-markdown" data-ice="content"><h1 id="custom-questions">Custom questions</h1><h2 id="overview">Overview</h2><p>In this article we&apos;ll create a couple of custom question experiences using external js libraries (jQueryUI, bootstrap), and describe a way to group them together generically.<br>We use a naming convention to distinguish between public and private methods and properties, use of private methods and properties is not supported. <strong>Methods and properties names starting with &#x201C;_&#x201D; are private and may be changed at any time without warning</strong> which could lead to unexpected behaviour or could prevent your survey from working.</p>
+<h2 id="disabling-default-rendering">Disabling default rendering</h2><p>In most cases, in order to create a custom question, you will need to disable default rendering.
+Open your survey in <strong>Professional Authoring</strong>, then in Questionary Tree, in the Question Skins section, insert new question skin. Set &apos;disable default rendering&apos; in this question skin&apos;s properties and save changes.
+After that, the default Confirmit markup will be disabled and you can render your own question.
+Make sure the skin you created is selected in the question settings. External CSS and JavaScript libraries are connected in the appropriate sections in the survey theme.</p>
 <h2 id="single-slider">Single slider</h2><h3 id="overview">Overview</h3><p>In that section we&apos;ll implement basic custom slider control using jQueryUI. Default Confirmit markup will be disabled, and instead we will create a jQueryUI slider bound to the question model.
 This example can be used with single questions.</p>
-<h3 id="implementation">Implementation</h3><p>Set &apos;disable default rendering&apos; on the question skin - default markup won&apos;t be used in that example so it can be disabled.  </p>
+<h3 id="implementation">Implementation</h3><p>Set &apos;disable default rendering&apos; on the question skin - default markup won&apos;t be used in that example so it can be disabled.</p>
 <p>Add the jQuery and jQueryUI js files to the question theme as external js files.</p>
 <pre><code class="lang-log"><code class="source-code prettyprint">https://code.jquery.com/jquery-3.2.1.min.js, 
 https://code.jquery.com/ui/1.12.1/jquery-ui.min.js  </code>
 </code></pre>
 <p>Add the jQueryUI css file to the question theme as an external css file.</p>
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css</code>
-</code></pre><p>Code to add to the JavaScript section:  </p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">$(function() {
-    var container = $(&apos;#&apos; + currentQuestion.id);
+</code></pre><p>Code to add to the JavaScript section:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">class SliderSingleQuestionView {
+    constructor(currentQuestion) {
+        this.question = currentQuestion;
+        this.init();
+    }
 
-    var sliderContainer = $(&apos;&lt;div class=&quot;single-slider&quot; style=&quot;max-width: 300px; margin: 20px;&quot;&gt;&lt;/div&gt;&apos;);
-    container.append(sliderContainer);
+    init() {
+        this.render();
+        this.question.changeEvent.on(this.onQuestionChange.bind(this));
+    }
 
-    sliderContainer.slider({
-        value: currentQuestion.value,
-        min: 1,
-        max: currentQuestion.answers.length,
-        change: function( event, ui ) {
-            currentQuestion.setValue(ui.value);
-        }
-    });
+    render() {
+        $(&apos;&lt;div class=&quot;cf-question__text&quot;&gt;&apos; + this.question.text + &apos;&lt;/div&gt;&apos;).appendTo(&apos;#&apos; + this.question.id);
+        $(&apos;&lt;div class=&quot;cf-question__instruction&quot;&gt;&apos; + this.question.instruction + &apos;&lt;/div&gt;&apos;).appendTo(&apos;#&apos; + this.question.id);
+        this.renderLabels();
+        this.renderSlider();
+    }
 
-    currentQuestion.changeEvent.on(() =&gt; {
-        sliderContainer.slider(&quot;value&quot;, currentQuestion.value);
-        console.log(&apos;Single slider(&apos; + currentQuestion.id + &apos;) changed: value &apos; + currentQuestion.value + &apos;, other &apos; + currentQuestion.otherValue);
-    });
-});</code>
+    renderLabels() {
+        const labels = $(&apos;&lt;div class=&quot;slider-single__labels&quot;&gt;&lt;/div&gt;&apos;);
+        labels
+            .css(&apos;width&apos;, &apos;100%&apos;)
+            .css(&apos;max-width&apos;, &apos;300px&apos;)
+            .css(&apos;display&apos;, &apos;flex&apos;)
+            .css(&apos;justify-content&apos;, &apos;space-between&apos;)
+            .css(&apos;margin-top&apos;, &apos;30px&apos;);
+
+        this.question.answers.forEach(answer =&gt; {
+            $(&apos;&lt;div class=&quot;cf-single-answer__text&quot;&gt;&apos; + answer.text + &apos;&lt;/div&gt;&apos;).appendTo(labels);
+        });
+        $(&apos;#&apos; + this.question.id).append(labels);
+    }
+
+    renderSlider() {
+        const sliderContainer = $(&apos;&lt;div class=&quot;single-slider&quot; style=&quot;max-width: 300px; margin-top: 20px;&quot;&gt;&lt;/div&gt;&apos;);
+        sliderContainer.appendTo(&apos;#&apos; + this.question.id);
+
+        sliderContainer.slider({
+            value: this.question.value,
+            min: 1,
+            max: this.question.answers.length,
+            change: this.onSliderChange.bind(this)
+        });
+    }
+
+    onSliderChange(event, data) {
+        this.question.setValue(data.value);
+    }
+
+    onQuestionChange(model) {
+        $(&apos;.single-slider&apos;).slider(&quot;value&quot;, this.question.value);
+    }
+}
+
+new SliderSingleQuestionView(currentQuestion);</code>
 </code></pre>
 <h2 id="grid-slider">Grid slider</h2><h3 id="overview">Overview</h3><p>It is also possible to adjust part of the default question markup. Here we will adjust the grid question to display sliders instead of radio buttons.
 This example can be used with grid questions.</p>
@@ -198,8 +238,9 @@ https://code.jquery.com/ui/1.12.1/jquery-ui.js</code>
         this.init();
     }
 
-    init(){
+    init() {
         this.hideScales();
+        this.renderLabelPanel();
         this.render();
         this.question.changeEvent.on(this.onQuestionChange.bind(this));
     }
@@ -209,19 +250,32 @@ https://code.jquery.com/ui/1.12.1/jquery-ui.js</code>
     }
 
     hideScales() {
-        $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer__scale&apos;).hide();
+        $(&apos;td:not(.cf-table-layout__cell--empty)&apos;).hide();
+        $(&apos;.cf-table-layout__cell--column-head&apos;).hide();
     }
 
-    render(){
-        this.question.answers.forEach(answer =&gt; {
-            const slider = $(&apos;&lt;div class=&quot;slider-grid__slider&quot; id=&quot;&apos; + this.getSliderId(answer.code) + &apos;&quot;&gt;&lt;/div&gt;&apos;);
-            const rowId = this.question.id + &apos;_&apos; + answer.code;
-            slider.appendTo(&apos;#&apos; + rowId + &apos; .cf-grid-layout__row-control&apos;);
+    renderLabelPanel() {
+        const labelPanel = $(&apos;&lt;th colspan=&quot;&apos; + this.question.scales.length +&apos;&quot;&gt;&lt;/th&gt;&apos;);
+        const labels = $(&apos;&lt;div class=&quot;slider-grid__row-control&quot;&gt;&lt;/div&gt;&apos;).appendTo(labelPanel);
+        labels.css(&apos;display&apos;, &apos;flex&apos;).css(&apos;justify-content&apos;, &apos;space-between&apos;).css(&apos;gap&apos;, &apos;30px&apos;);
+        labelPanel.appendTo(&apos;.cf-table-layout__row--head&apos;);
 
-            $( &apos;#&apos; + this.getSliderId(answer.code) ).slider({
+        this.question.scales.forEach(scale =&gt; {
+            $(&apos;&lt;div&gt;&apos; + scale.text + &apos;&lt;/div&gt;&apos;).appendTo(labels);
+        });
+    }
+
+    render() {
+        this.question.answers.forEach(answer =&gt; {
+            const slider = $(&apos;&lt;td colspan=&quot;&apos;+ this.question.scales.length +&apos;&quot;&gt;&apos; +
+                &apos;&lt;div class=&quot;slider-grid__slider&quot; id=&quot;&apos; + this.getSliderId(answer.code) + &apos;&quot;&gt;&lt;/div&gt;&lt;/td&gt;&apos;);
+            const rowId = this.question.id + &apos;_&apos; + answer.code;
+            slider.appendTo(&apos;#desktop_&apos; + rowId);
+
+            $(&apos;#&apos; + this.getSliderId(answer.code)).slider({
                 value: 0,
                 min: 0,
-                max: this.question.scales.length- 1,
+                max: this.question.scales.length - 1,
                 step: 1,
                 change: this.onSliderChange.bind(this, answer.code)
             });
@@ -233,16 +287,16 @@ https://code.jquery.com/ui/1.12.1/jquery-ui.js</code>
         $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer__control&apos;).css(&apos;align-self&apos;, &apos;center&apos;).css(&apos;max-width&apos;, &apos;600px&apos;).css(&apos;flex-grow&apos;, &apos;1&apos;);
     }
 
-    onSliderChange(answerCode, event, data){
+    onSliderChange(answerCode, event, data) {
         const answerValue = this.question.scales[data.value].code;
         this.question.setValue(answerCode, answerValue);
     }
 
-    onQuestionChange(model){
+    onQuestionChange(model) {
         model.changes.values.forEach(answerCode =&gt; {
             let sliderId = this.getSliderId(answerCode);
             let value = this.question.scales.findIndex(scale =&gt; scale.code == this.question.values[answerCode]);
-            $( &apos;#&apos; + sliderId ).slider(&quot;value&quot;, value);
+            $(&apos;#&apos; + sliderId).slider(&quot;value&quot;, value);
         });
     }
 }
@@ -312,11 +366,10 @@ This example can be used with grid questions.</p>
             &apos;&lt;/div&gt;&apos;);
         labelPanel.appendTo(&apos;#&apos; + this.question.id + &apos; .cf-grid-layout&apos;);
 
-        const labels = $(&apos;&lt;div class=&quot;cf-grid-answer__labels&quot;&gt;&lt;/div&gt;&apos;);
+        const labels = $(&apos;.slider-grid__row-control&apos;);
         this.question.scales.forEach(scale =&gt; {
             $(&apos;&lt;div class=&quot;cf-grid-answer__label&quot;&gt;&apos; + scale.text + &apos;&lt;/div&gt;&apos;).appendTo(labels);
         });
-        $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer--fake-for-panel .cf-grid-layout__row-control&apos;).append(labels);
     }
 
     renderRows(){
@@ -347,6 +400,7 @@ This example can be used with grid questions.</p>
         $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer&apos;).css(&apos;margin-bottom&apos;, &apos;15px&apos;);
         $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer__text&apos;).css(&apos;margin-top&apos;, &apos;0&apos;);
         $(&apos;#&apos; + this.question.id + &apos; .cf-grid-answer__control&apos;).css(&apos;align-self&apos;, &apos;center&apos;).css(&apos;max-width&apos;, &apos;600px&apos;).css(&apos;flex-grow&apos;, &apos;1&apos;);
+        $(&apos;#&apos; + this.question.id + &apos; .slider-grid__row-control&apos;).css(&apos;display&apos;, &apos;flex&apos;).css(&apos;justify-content&apos;, &apos;space-between&apos;).css(&apos;width&apos;, &apos;100%&apos;);
     }
 
     renderErrors(){
@@ -398,7 +452,7 @@ This example can be used with grid questions.</p>
 new SliderGridQuestionView(currentQuestion);</code>
 </code></pre>
 <h2 id="multi-accordion-with-bootstrap">Multi accordion with bootstrap</h2><h3 id="overview">Overview</h3><p>That section demonstrates how to create a multi question with expandable groups.
-This example can be used with multi questions.</p>
+This example can be used with multi questions including answer groups.</p>
 <h3 id="implementation">Implementation</h3><p>Set &apos;Disable default rendering&apos; in the question skin&apos;s properties.
 Add the jQuery and Bootstrap js files to the question theme as external js files.</p>
 <pre><code><code class="source-code prettyprint">https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css</code>
@@ -413,7 +467,7 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
         this.init();
     }
 
-    init(){
+    init() {
         this.render();
         this.initValues();
         this.subscribeToQuestion();
@@ -430,9 +484,11 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
     initValues() {
         this.question.values.forEach(value =&gt; {
             const id = this.question.id + &apos;_&apos; + value;
-        const className = &apos;cf-multi-answer--selected&apos;;
-        $(&apos;#&apos; + id).addClass(className);
-    });
+            const answerClassName = &apos;cf-checkbox-answer--selected&apos;;
+            const checkboxClassName = &apos;cf-checkbox--selected&apos;;
+            $(&apos;#&apos; + id).addClass(answerClassName);
+            $(&apos;#&apos; + id + &apos;_control&apos;).addClass(checkboxClassName);
+        });
 
         if (Object.keys(this.question.otherValues).length &gt; 0) {
             return;
@@ -443,12 +499,12 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
         }
     }
 
-    subscribeToQuestion(){
+    subscribeToQuestion() {
         this.question.changeEvent.on(this.onQuestionChange.bind(this));
         this.question.validationCompleteEvent.on(this.onQuestionValidationComplete.bind(this));
     }
 
-    renderAccordion(){
+    renderAccordion() {
         const accordion = $(&apos;&lt;div class=&quot;accordion cf-list&quot;&gt;&lt;/div&gt;&apos;);
         $(&apos;#&apos; + this.question.id + &apos; .cf-question__content&apos;).append(accordion);
 
@@ -460,7 +516,7 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
                 this.getGroupNode(answer.group).find(&apos;.card-body&apos;).append(newAnswer);
             }
             else {
-                if(!container){
+                if (!container) {
                     container = $(&apos;&lt;div class=&quot;my-2 margin-left&quot;&gt;&lt;/div&gt;&apos;);
                     container.appendTo(accordion);
                 }
@@ -469,17 +525,17 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
         })
     }
 
-    getGroupNode(group){
+    getGroupNode(group) {
         const groupId = this.question.id + &apos;_&apos; + group.code;
         let groupNode = $(&apos;#&apos; + groupId);
-        if(groupNode.length === 0){
+        if (groupNode.length === 0) {
             groupNode = this.createGroup(group);
         }
 
         return groupNode;
     }
 
-    createGroup(group){
+    createGroup(group) {
         const groupId = this.question.id + &apos;_&apos; + group.code;
         const groupElement = $(&apos;&lt;div class=&quot;card my-2&quot;&gt;&lt;/div&gt;&apos;);
         const header = $(&apos;&lt;div class=&quot;card-header&quot;&gt;&apos; +
@@ -491,7 +547,7 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
             &apos;&lt;div class=&quot;card-body&quot;&gt;&lt;/div&gt;&apos; +
             &apos;&lt;/div&gt;&apos;);
 
-        header.find(&apos;.container-fluid&apos;).on(&apos;click&apos;, function(){
+        header.find(&apos;.container-fluid&apos;).on(&apos;click&apos;, function () {
             const state = !$(this.parentElement).hasClass(&apos;card-header--closed&apos;);
             $(this.parentElement).toggleClass(&apos;card-header--closed&apos;, state);
         });
@@ -502,31 +558,36 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
         return groupElement;
     }
 
-    createAnswer(answer){
+    createAnswer(answer) {
         const answerId = this.question.id + &apos;_&apos; + answer.code;
-        const newAnswer = $(&apos;&lt;div class=&quot;cf-list__item cf-multi-answer&quot; id=&quot;&apos; + answerId + &apos;&quot;&gt;&lt;/div&gt;&apos;);
+        const answerContainer = $(&apos;&lt;div class=&quot;cf-list__item&quot;&gt;&lt;/div&gt;&apos;);
+        const newAnswer = $(&apos;&lt;div class=&quot;cf-checkbox-answer&quot; id=&quot;&apos; + answerId + &apos;&quot;&gt;&lt;/div&gt;&apos;).appendTo(answerContainer);
+        const answerControl = $(&apos;&lt;div class=&quot;cf-checkbox-answer__control&quot;&gt;&lt;/div&gt;&apos;).appendTo(newAnswer);
 
-        if(answer.isExclusive){
-            newAnswer.addClass(&quot;cf-multi-answer--exclusive&quot;);
-        }
+        if (!answer.isExclusive)
+            $(&apos;&lt;div class=&quot;cf-checkbox&quot; id=&quot;&apos; + answerId + &apos;_control&apos; + &apos;&quot;&gt;&lt;/div&gt;&apos;).appendTo(answerControl);
+        else
+            $(&apos;&lt;div class=&quot;cf-radio&quot; id=&quot;&apos; + answerId + &apos;_control&apos; + &apos;&quot;&gt;&lt;/div&gt;&apos;).appendTo(answerControl);
 
-        if(answer.isOther){
-            const inputId =this.question.id + &apos;_&apos; + answer.code + &apos;_other&apos;;
-            const input = $(&apos;&lt;input id=&quot;&apos; + inputId + &apos;&quot; type=&quot;text&quot; class=&quot;cf-multi-answer__other-input cf-text-box&quot; value=&quot;&quot; placeholder=&quot;Other&quot;&gt;&apos;);
-            newAnswer.append(input);
+        const answerContent = $(&apos;&lt;div class=&quot;cf-checkbox-answer__content&quot;&gt;&lt;/div&gt;&apos;).appendTo(newAnswer);
+
+        if (answer.isOther) {
+            const inputId = this.question.id + &apos;_&apos; + answer.code + &apos;_other&apos;;
+            const input = $(&apos;&lt;input id=&quot;&apos; + inputId + &apos;&quot; type=&quot;text&quot; class=&quot;cf-checkbox-answer__other cf-text-box &quot; value=&quot;&quot; placeholder=&quot;&apos;+ answer.text +&apos;&quot;&gt;&apos;);
+            answerContent.append(input);
 
             input.on(&apos;input&apos;, this.onAnswerInput.bind(this, answer.code, inputId));
             input.on(&apos;click&apos;, e =&gt; e.stopPropagation());
         }
-        else{
-            $(&apos;&lt;div class=&quot;cf-multi-answer__text&quot; id=&quot;&apos; + answerId + &apos;_text&quot;&gt;&apos;+ answer.text + &apos;&lt;/div&gt;&apos;).appendTo(newAnswer);
-        }
+        else
+            $(&apos;&lt;div class=&quot;cf-checkbox-answer__text&quot; id=&quot;&apos; + answerId + &apos;_text&quot;&gt;&apos; + answer.text + &apos;&lt;/div&gt;&apos;).appendTo(answerContent);
+
         newAnswer.on(&apos;click&apos;, this.onAnswerClick.bind(this, answer.code));
 
-        return newAnswer;
+        return answerContainer;
     }
 
-    renderErrors(errors){
+    renderErrors(errors) {
         $(&apos;#&apos; + this.question.id).removeClass(&quot;cf-question--error&quot;);
         $(&apos;#&apos; + this.question.id + &apos; .cf-error-block&apos;).remove();
 
@@ -540,46 +601,52 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
         errorList.insertAfter(&apos;#&apos; + this.question.id + &apos; .cf-question__instruction&apos;);
 
         errors.forEach(error =&gt; {
-        $(&apos;&lt;li class=&quot;cf-error-list__item&quot;&gt;&apos; + error + &apos;&lt;/li&gt;&apos;).appendTo(errorList);
+            $(&apos;&lt;li class=&quot;cf-error-list__item&quot;&gt;&apos; + error + &apos;&lt;/li&gt;&apos;).appendTo(errorList);
         });
 
         $(&apos;#&apos; + this.question.id).addClass(&quot;cf-question--error&quot;);
     }
 
-    onAnswerInput(answerCode, inputId){
+    onAnswerInput(answerCode, inputId) {
         this.question.setValue(answerCode, &apos;true&apos;);
         const value = $(&apos;#&apos; + inputId)[0].value;
         this.question.setOtherValue(answerCode, value);
     }
 
-    onAnswerClick(answerCode){
+    onAnswerClick(answerCode) {
         const value = this.question.values.indexOf(answerCode) &lt;= -1;
         this.question.setValue(answerCode, value);
     }
 
-    onQuestionChange(model){
-        if(model.changes.values) {
+    onQuestionChange(model) {
+        if (model.changes.values) {
             model.changes.values.forEach(value =&gt; {
                 let id = this.question.id + &apos;_&apos; + value;
-                let className = &apos;cf-multi-answer--selected&apos;;
+                let answerClassName = &apos;cf-checkbox-answer--selected&apos;;
+                let checkboxClassName = &apos;cf-checkbox--selected&apos;;
                 if (this.question.values.indexOf(value) &gt; -1) {
-                    $(&apos;#&apos; + id).addClass(className);
+                    $(&apos;#&apos; + id).addClass(answerClassName);
+                    $(&apos;#&apos; + id + &apos;_control&apos;).addClass(checkboxClassName);
                 }
                 else {
-                    $(&apos;#&apos; + id).removeClass(className);
+                    $(&apos;#&apos; + id).removeClass(answerClassName);
+                    $(&apos;#&apos; + id + &apos;_control&apos;).removeClass(checkboxClassName);
                 }
             });
         }
 
-        if(model.changes.OtherValues) {
+        if (model.changes.OtherValues) {
             model.changes.OtherValues.forEach(value =&gt; {
                 let id = this.question.id + &apos;_&apos; + value;
-                let className = &apos;cf-multi-answer--selected&apos;;
+                let answerClassName = &apos;cf-checkbox-answer--selected&apos;;
+                let checkboxClassName = &apos;cf-checkbox--selected&apos;;
                 if (this.question.values.indexOf(value) &gt; -1) {
-                    $(&apos;#&apos; + id).addClass(className);
+                    $(&apos;#&apos; + id).addClass(answerClassName);
+                    $(&apos;#&apos; + id + &apos;_control&apos;).addClass(checkboxClassName);
                 }
                 else {
-                    $(&apos;#&apos; + id).removeClass(className);
+                    $(&apos;#&apos; + id).removeClass(answerClassName);
+                    $(&apos;#&apos; + id + &apos;_control&apos;).removeClass(checkboxClassName);
                 }
             });
         }
@@ -605,7 +672,7 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
 
 new AccordionMultiQuestionView(currentQuestion);</code>
 </code></pre>
-<p>Styles to add to the Custom CSS section of the question theme: </p>
+<p>Styles to add to the Custom CSS section of the question theme:</p>
 <pre><code class="lang-css"><code class="source-code prettyprint">margin-left {
     margin-left: 1.3rem!important;
 }
@@ -634,11 +701,15 @@ new AccordionMultiQuestionView(currentQuestion);</code>
 <p>Question views are taken from the previous examples.<br>Don&apos;t forget to set &apos;Disable default rendering&apos; in the question skin&apos;s properties.<br>Code to add to the JavaScript section:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">class QuestionViewFactory {
     create(question) {
-        if (question.type == &apos;Multi&apos;) {
+        if(question.type === &apos;Single&apos;) {
+            return new SliderSingleQuestionView(question);
+        }
+
+        if (question.type === &apos;Multi&apos;) {
             return new AccordionMultiQuestionView(question);
         }
 
-        if (question.type == &apos;Grid&apos;) {
+        if (question.type === &apos;Grid&apos;) {
             return new SliderGridQuestionView(question);
         }
     }
