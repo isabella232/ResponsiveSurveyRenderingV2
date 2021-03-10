@@ -103,6 +103,7 @@
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#side-by-side-views" data-ice="link">Side by side views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#inherit-from-default-views" data-ice="link">Inherit from default views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#replace-default-view-with-custom" data-ice="link">Replace default view with custom</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#detach-question-views" data-ice="link">Detach question views</a></li>
 </ul>
   </div>
 <div data-ice="manual" class="nav-anchor">
@@ -111,6 +112,7 @@
     <li data-ice="manualNav" class="indent-h1" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html" data-ice="link">Custom questions</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#disabling-default-rendering" data-ice="link">Disabling default rendering</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#where-to-put-code" data-ice="link">Where to put code</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#single-slider" data-ice="link">Single slider</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#implementation" data-ice="link">Implementation</a></li>
@@ -282,6 +284,16 @@ var myCustomViewFactory = {
 
 // replace the default factory with the custom one
 Confirmit.pageView.questionViewFactory = myCustomViewFactory;</code>
+</code></pre>
+<h3 id="detach-question-views">Detach question views</h3><p>If you want to manually manage resources when working with dynamic questions, you need to override the <code>detach()</code> method in your custom view</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">var createFn = function (model) {
+    var factory = Confirmit.pageView.questionViewFactory;
+    var view = factory.create(model);
+    view.detach = function () { ... };
+
+    return view;
+};
+Confirmit.pageView.registerCustomQuestionView(currentQuestion.id, createFn);</code>
 </code></pre>
 </div>
 </div>

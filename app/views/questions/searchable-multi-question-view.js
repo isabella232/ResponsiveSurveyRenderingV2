@@ -1,11 +1,12 @@
-import SearchableQuestionViewBase from './base/searchable-question-view-base';
 import Utils from '../../utils';
+import SearchableQuestionViewBase from './base/searchable-question-view-base';
 import MultiCountHelper from '../helpers/multi-count-helper';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {MultiOtherValuesKeeper} from "../helpers/other-values-keeper";
 
-export default class SearchableMultiQuestionView extends SearchableQuestionViewBase {
+export default class SearchableMultiQuestionView extends StoredOtherValuesMixin(SearchableQuestionViewBase) {
     constructor(question, settings = null) {
-        super(question, settings);
-        this._storedOtherValues = {...this._question.otherValues};
+        super(question, settings, new MultiOtherValuesKeeper(question, settings));
         this._disabledAnswerClass = 'cf-checkbox-answer--disabled';
     }
 
@@ -76,7 +77,6 @@ export default class SearchableMultiQuestionView extends SearchableQuestionViewB
             if (answer.isOther) {
                 const otherInput = this._getAnswerOtherNode(answer.code);
                 otherInput.on('click', e => e.stopPropagation());
-                otherInput.on('focus', () => this._onAnswerOtherNodeFocus(answer));
                 otherInput.on('input', e => this._onAnswerOtherNodeValueChange(answer, e.target.value));
             }
         });
@@ -127,28 +127,6 @@ export default class SearchableMultiQuestionView extends SearchableQuestionViewB
             const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(this._question.values.length, this._question.multiCount);
             answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
         });
-
-        const {values = []} = changes;
-
-        values.forEach(answerCode => {
-            const checked = this._question.values.includes(answerCode);
-            const cached = !Utils.isEmpty(this._storedOtherValues[answerCode]);
-
-            if (checked && cached) {
-                this._question.setOtherValue(answerCode, this._storedOtherValues[answerCode]);
-                delete this._storedOtherValues[answerCode];
-            }
-        });
-    }
-
-    _updateStoredOtherValues({values = []}) {
-        values.forEach(answerCode => {
-            const checked = this._question.values.includes(answerCode);
-            if (!checked) {
-                this._storedOtherValues[answerCode] = this._question.otherValues[answerCode];
-                this._question.setOtherValue(answerCode, null);
-            }
-        });
     }
 
     _isSelected(answer) {
@@ -156,14 +134,13 @@ export default class SearchableMultiQuestionView extends SearchableQuestionViewB
     }
 
     _toggleAnswer(answer) {
-        const newValue = !this._isSelected(answer);
-        if (newValue) {
-            this._selectAnswer(answer);
-        } else {
+        if (this._isSelected(answer)) {
             this._unselectAnswer(answer);
+            return;
         }
 
-        if (newValue && answer.isOther) {
+        this._selectAnswer(answer);
+        if (answer.isOther) {
             const otherInput = this._getAnswerOtherNode(answer.code);
             if (Utils.isEmpty(otherInput.val())) {
                 otherInput.focus();
@@ -176,19 +153,10 @@ export default class SearchableMultiQuestionView extends SearchableQuestionViewB
 
         this._updateAnswerNodes(data.changes);
         this._updateAnswerOtherNodes(data.changes);
-        this._updateStoredOtherValues(data.changes);
     }
 
     _onAnswerNodeClick(answer) {
         this._toggleAnswer(answer);
-    }
-
-    _onAnswerOtherNodeFocus(answer) {
-        if (Utils.isEmpty(this._storedOtherValues[answer.code])) {
-            return;
-        }
-
-        this._question.setValue(answer.code, true);
     }
 
     _onAnswerOtherNodeValueChange(answer, otherValue) {

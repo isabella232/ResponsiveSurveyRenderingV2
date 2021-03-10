@@ -2,12 +2,12 @@ import QuestionViewBase from './questions/base/question-view-base';
 import QuestionView from './questions/base/question-view.js';
 import QuestionWithAnswersView from './questions/base/question-with-answers-view.js';
 import RatingGridQuestionViewBase from './questions/base/rating-grid-question-view-base.js';
-import SingleQuestionView from './questions/single-question-view.js';
+import SingleQuestionView, {SingleQuestionViewWithStoredOtherValues} from './questions/single-question-view.js';
 import SliderSingleQuestionView from './questions/slider-single-question-view.js';
 import SliderNumericQuestionView from './questions/slider-numeric-question-view.js';
 import SliderGridQuestionView from './questions/slider-grid-question-view.js';
-import MultiQuestionView from './questions/multi-question-view.js';
-import CaptureOrderMultiQuestionView from './questions/capture-order-multi-question-view';
+import MultiQuestionView, {MultiQuestionViewWithStoredOtherValues} from './questions/multi-question-view.js';
+import CaptureOrderMultiQuestionView, {CaptureOrderMultiQuestionViewWithStoredOtherValues} from './questions/capture-order-multi-question-view';
 import GridQuestionView from './questions/grid/grid-question-view.js';
 import GridQuestionViewBase from './questions/grid/grid-question-view-base.js';
 import MobileGridQuestionView from './questions/grid/mobile-grid-question-view.js';
@@ -26,7 +26,7 @@ import DateQuestionView from './questions/date-question-view.js';
 import DateQuestionPolyfillView from './questions/date-question-polyfill-view.js';
 import EmailQuestionView from './questions/email-question-view';
 import CodeCaptureQuestionView from './questions/code-capture-question-view';
-import RankingQuestionView from './questions/ranking-question-view.js';
+import RankingQuestionView, {RankingQuestionViewWithStoredOtherValues} from './questions/ranking-question-view.js';
 import HorizontalRatingSingleQuestionView from './questions/horizontal-rating-single-question-view.js';
 import HorizontalRatingGridQuestionView from './questions/horizontal-rating-grid/horizontal-rating-grid-question-view.js';
 import MobileHorizontalRatingGridQuestionView from './questions/horizontal-rating-grid/mobile-horizontal-rating-grid-question-view.js';
@@ -48,9 +48,9 @@ import CarouselGridBarsGridQuestionView from './questions/carousel-grid-bars-gri
 import CarouselStarRatingGridQuestionView from './questions/carousel-star-rating-grid-question-view.js';
 import DropdownSingleQuestionView from './questions/dropdown-single-question-view.js';
 import DropdownGridQuestionView from './questions/dropdown-grid-question-view.js';
-import AnswerButtonsSingleQuestionView from './questions/answer-buttons-single-question-view.js';
-import AnswerButtonsMultiQuestionView from './questions/answer-buttons-multi-question-view.js';
-import AnswerButtonsCaptureOrderMultiQuestionView from './questions/answer-buttons-capture-order-multi-question-view';
+import AnswerButtonsSingleQuestionView, {AnswerButtonsSingleQuestionViewWithStoredOtherValues} from './questions/answer-buttons-single-question-view.js';
+import AnswerButtonsMultiQuestionView, {AnswerButtonsMultiQuestionViewWithStoredOtherValues} from './questions/answer-buttons-multi-question-view.js';
+import AnswerButtonsCaptureOrderMultiQuestionView, {AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues} from './questions/answer-buttons-capture-order-multi-question-view';
 import GeolocationQuestionView from './questions/geolocation-question-view.js';
 import ImageUploadQuestionView from './questions/image-upload-question-view.js';
 import LoginPageQuestionView from './questions/login-page-question-view.js';
@@ -99,11 +99,14 @@ export default Object.freeze({
     'QuestionWithAnswersView': QuestionWithAnswersView,
     'RatingGridQuestionViewBase': RatingGridQuestionViewBase,
     'SingleQuestionView' : SingleQuestionView,
+    'SingleQuestionViewWithStoredOtherValues': SingleQuestionViewWithStoredOtherValues,
     'SliderSingleQuestionView' : SliderSingleQuestionView,
     'SliderNumericQuestionView' : SliderNumericQuestionView,
     'SliderGridQuestionView' : SliderGridQuestionView,
     'MultiQuestionView': MultiQuestionView,
+    'MultiQuestionViewWithStoredOtherValues': MultiQuestionViewWithStoredOtherValues,
     'CaptureOrderMultiQuestionView': CaptureOrderMultiQuestionView,
+    'CaptureOrderMultiQuestionViewWithStoredOtherValues': CaptureOrderMultiQuestionViewWithStoredOtherValues,
     'GridQuestionView': GridQuestionView,
     'GridQuestionViewBase': GridQuestionViewBase,
     'MobileGridQuestionView': MobileGridQuestionView,
@@ -122,6 +125,7 @@ export default Object.freeze({
     'DateQuestionPolyfillView': DateQuestionPolyfillView,
     'EmailQuestionView': EmailQuestionView,
     'RankingQuestionView': RankingQuestionView,
+    'RankingQuestionViewWithStoredOtherValues': RankingQuestionViewWithStoredOtherValues,
     'HorizontalRatingSingleQuestionView': HorizontalRatingSingleQuestionView,
     'HorizontalRatingGridQuestionView': HorizontalRatingGridQuestionView,
     'MobileHorizontalRatingGridQuestionView': MobileHorizontalRatingGridQuestionView,
@@ -144,8 +148,11 @@ export default Object.freeze({
     'DropdownSingleQuestionView': DropdownSingleQuestionView,
     'DropdownGridQuestionView': DropdownGridQuestionView,
     'AnswerButtonsSingleQuestionView': AnswerButtonsSingleQuestionView,
+    'AnswerButtonsSingleQuestionViewWithStoredOtherValues': AnswerButtonsSingleQuestionViewWithStoredOtherValues,
     'AnswerButtonsMultiQuestionView': AnswerButtonsMultiQuestionView,
+    'AnswerButtonsMultiQuestionViewWithStoredOtherValues': AnswerButtonsMultiQuestionViewWithStoredOtherValues,
     'AnswerButtonsCaptureOrderMultiQuestionView': AnswerButtonsCaptureOrderMultiQuestionView,
+    'AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues': AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues,
     'GeolocationQuestionView': GeolocationQuestionView,  // This ref used in mobile CAPI app overrides
     'ImageUploadQuestionView': ImageUploadQuestionView, // This ref used in mobile CAPI app overrides
     'VideoUploadQuestionView': VideoUploadQuestionView, // This ref used in mobile CAPI app overrides

@@ -103,6 +103,7 @@
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#side-by-side-views" data-ice="link">Side by side views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#inherit-from-default-views" data-ice="link">Inherit from default views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#replace-default-view-with-custom" data-ice="link">Replace default view with custom</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#detach-question-views" data-ice="link">Detach question views</a></li>
 </ul>
   </div>
 <div data-ice="manual" class="nav-anchor">
@@ -111,6 +112,7 @@
     <li data-ice="manualNav" class="indent-h1" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html" data-ice="link">Custom questions</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#disabling-default-rendering" data-ice="link">Disabling default rendering</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#where-to-put-code" data-ice="link">Where to put code</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#single-slider" data-ice="link">Single slider</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#implementation" data-ice="link">Implementation</a></li>
@@ -157,7 +159,8 @@
 <h2 id="disabling-default-rendering">Disabling default rendering</h2><p>In most cases, in order to create a custom question, you will need to disable default rendering.
 Open your survey in <strong>Professional Authoring</strong>, then in Questionary Tree, in the Question Skins section, insert new question skin. Set &apos;disable default rendering&apos; in this question skin&apos;s properties and save changes.
 After that, the default Confirmit markup will be disabled and you can render your own question.
-Make sure the skin you created is selected in the question settings. External CSS and JavaScript libraries are connected in the appropriate sections in the survey theme.</p>
+Make sure the skin you created is selected in the question settings.</p>
+<h2 id="where-to-put-code">Where to put code</h2><p>External JS libraries must be connected in the survey theme: <strong>Custom JavaScript -&gt; External JavaScript URL</strong>.<br>External CSS libraries must be connected in the survey theme: <strong>Custom CSS -&gt; External Style Sheet URL</strong>.<br>Custom styles must be added to <strong>Custom CSS</strong> section.<br>JavaScript code can be added both in the survey theme (<strong>Custom JavaScript</strong> section) and in the question theme (<strong>JavaScript</strong> section).</p>
 <h2 id="single-slider">Single slider</h2><h3 id="overview">Overview</h3><p>In that section we&apos;ll implement basic custom slider control using jQueryUI. Default Confirmit markup will be disabled, and instead we will create a jQueryUI slider bound to the question model.
 This example can be used with single questions.</p>
 <h3 id="implementation">Implementation</h3><p>Set &apos;disable default rendering&apos; on the question skin - default markup won&apos;t be used in that example so it can be disabled.</p>
@@ -167,7 +170,7 @@ https://code.jquery.com/ui/1.12.1/jquery-ui.min.js  </code>
 </code></pre>
 <p>Add the jQueryUI css file to the question theme as an external css file.</p>
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css</code>
-</code></pre><p>Code to add to the JavaScript section:</p>
+</code></pre><p>Code to add to the JavaScript section of the question theme:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">class SliderSingleQuestionView {
     constructor(currentQuestion) {
         this.question = currentQuestion;
@@ -231,7 +234,7 @@ This example can be used with grid questions.</p>
 https://code.jquery.com/ui/1.12.1/jquery-ui.js</code>
 </code></pre><p>Add the jQueryUI css file to the question theme as an external css file.</p>
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css</code>
-</code></pre><p>Code to add to the JavaScript section:</p>
+</code></pre><p>Code to add to the JavaScript section of the question theme:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">class SliderSimpleGridQuestionView {
     constructor(currentQuestion) {
         this.question = currentQuestion;
@@ -309,7 +312,7 @@ This example can be used with grid questions.</p>
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/jquery-1.12.4.js, https://code.jquery.com/ui/1.12.1/jquery-ui.js</code>
 </code></pre><p>Add the jQueryUI css file to the question theme as an external css file.</p>
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css</code>
-</code></pre><p>Code to add to the JavaScript section:</p>
+</code></pre><p>Code to add to the JavaScript section of the question theme:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">class SliderGridQuestionView {
     constructor(currentQuestion) {
         this.question = currentQuestion;
@@ -460,7 +463,7 @@ Add the jQuery and Bootstrap js files to the question theme as external js files
 <pre><code><code class="source-code prettyprint">https://code.jquery.com/jquery-3.2.1.slim.min.js,
 https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js,
 https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code>
-</code></pre><p>Code to add to the JavaScript section:</p>
+</code></pre><p>Code to add to the JavaScript section of the question theme:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">class AccordionMultiQuestionView {
     constructor(currentQuestion) {
         this.question = currentQuestion;
@@ -672,7 +675,7 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js</code
 
 new AccordionMultiQuestionView(currentQuestion);</code>
 </code></pre>
-<p>Styles to add to the Custom CSS section of the question theme:</p>
+<p>Styles to add to the Custom CSS section of the survey theme:</p>
 <pre><code class="lang-css"><code class="source-code prettyprint">margin-left {
     margin-left: 1.3rem!important;
 }
@@ -698,10 +701,14 @@ new AccordionMultiQuestionView(currentQuestion);</code>
 }</code>
 </code></pre>
 <h2 id="custom-factory-example">Custom factory example</h2><p>Once you&apos;ve created some custom question experiences, you might want to pack it together. One way to do this is to use a factory class to instantiate the proper custom question view.</p>
-<p>Question views are taken from the previous examples.<br>Don&apos;t forget to set &apos;Disable default rendering&apos; in the question skin&apos;s properties.<br>Code to add to the JavaScript section:</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">class QuestionViewFactory {
-    create(question) {
-        if(question.type === &apos;Single&apos;) {
+<p>Question views are taken from the previous examples.<br>Don&apos;t forget to set &apos;Disable default rendering&apos; in the question skin&apos;s properties.<br>Code to add to the JavaScript section of the survey theme:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">// &lt;code of the SliderSingleQuestionView /&gt;
+// &lt;code of the AccordionMultiQuestionView /&gt;
+// &lt;code of the SliderGridQuestionView /&gt;
+
+class QuestionViewFactory {
+    create (question) {
+        if (question.type === &apos;Single&apos;) {
             return new SliderSingleQuestionView(question);
         }
 
@@ -715,8 +722,10 @@ new AccordionMultiQuestionView(currentQuestion);</code>
     }
 }
 
-let factory = new QuestionViewFactory();
-factory.create(currentQuestion);</code>
+const factory = new QuestionViewFactory();</code>
+</code></pre>
+<p>Code to add to the JavaScript section of the question theme:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">factory.create(currentQuestion);</code>
 </code></pre>
 </div>
 </div>

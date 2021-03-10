@@ -1,4 +1,6 @@
 import MultiQuestionView from './multi-question-view.js';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {MultiOtherValuesKeeper} from "../helpers/other-values-keeper";
 
 export default class AnswerButtonsMultiQuestionView extends MultiQuestionView {
     /**
@@ -29,5 +31,11 @@ export default class AnswerButtonsMultiQuestionView extends MultiQuestionView {
         this._answerErrorBlockManager.showErrors(errorBlockId, answerNode, errors);
 
         this._addAriaValidationAttributesToAnswerOther(validationResult);
+    }
+}
+
+export class AnswerButtonsMultiQuestionViewWithStoredOtherValues extends StoredOtherValuesMixin(AnswerButtonsMultiQuestionView) {
+    constructor(question, settings) {
+        super(question, settings, new MultiOtherValuesKeeper(question, settings));
     }
 }

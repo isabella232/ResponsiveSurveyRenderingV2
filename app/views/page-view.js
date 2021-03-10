@@ -149,12 +149,12 @@ export default class PageView {
     }
 
     _detachQuestionView(questionId) {
-        this._questionViews.filter(view => view.id === questionId).forEach(view => {
-            view.detachModelHandlers();
+        this._questionViews.filter(view => (view.questionId || view.id) === questionId).forEach(view => {
+            view.detach();
         });
 
-        this._questionViews = this._questionViews.filter(view => view.id !== questionId);
-        this._hiddenViews = this._hiddenViews.filter(view => view.id !== questionId);
+        this._questionViews = this._questionViews.filter(view => (view.questionId || view.id) !== questionId);
+        this._hiddenViews = this._hiddenViews.filter(view => (view.questionId || view.id) !== questionId);
     }
 
     _attachModelHandlers() {

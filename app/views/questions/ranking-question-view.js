@@ -3,6 +3,8 @@ import Utils from './../../utils.js';
 import KEYS from '../helpers/keyboard-keys';
 import ValidationTypes from '../../api/models/validation/validation-types';
 import MultiCountHelper from '../helpers/multi-count-helper';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {RankingOtherValuesKeeper} from "../helpers/other-values-keeper";
 
 export default class RankingQuestionView extends QuestionWithAnswersView {
     /**
@@ -17,8 +19,6 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
         this._currentAnswerIndex = null;
 
         this._rankingStatusNode = this._container.find('.cf-ranking-status');
-
-        this._storedOtherValues = {...this._question.otherValues};
 
         this._attachHandlersToDOM();
     }
@@ -147,29 +147,9 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
                         .attr('aria-hidden', 'false')
                         .attr('disabled', null);
                 });
-
-            values.forEach(answerCode => {
-                const checked = Object.keys(this._question.values).includes(answerCode);
-                const cached = !Utils.isEmpty(this._storedOtherValues[answerCode]);
-
-                if (checked && cached) {
-                    this._question.setOtherValue(answerCode, this._storedOtherValues[answerCode]);
-                    delete this._storedOtherValues[answerCode];
-                }
-            });
         }
 
         super._updateAnswerOtherNodes({otherValues});
-    }
-
-    _updateStoredOtherValues({values = []}) {
-        values.forEach(answerCode => {
-            const checked = Object.keys(this._question.values).includes(answerCode);
-            if (!checked) {
-                this._storedOtherValues[answerCode] = this._question.otherValues[answerCode];
-                this._question.setOtherValue(answerCode, null);
-            }
-        });
     }
 
     _attachHandlersToDOM() {
@@ -181,7 +161,6 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
                 const otherInput = this._getAnswerOtherNode(answer.code);
                 otherInput.on('click', e => e.stopPropagation());
                 otherInput.on('keydown', e => e.stopPropagation());
-                otherInput.on('focus', () => this._onAnswerOtherNodeFocus(answer));
                 otherInput.on('input', e => this._onOtherInputValueChanged(answer, e.target.value));
             }
         });
@@ -253,7 +232,6 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
         this._updateAnswerNodes(changes);
         this._updateAnswerOtherNodes(changes);
         this._updateRankingStatus(changes);
-        this._updateStoredOtherValues(changes);
     }
 
     _onAnswerClick(answer) {
@@ -262,14 +240,6 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
 
     _onAnswerNodeFocus(answerIndex) {
         this._currentAnswerIndex = answerIndex;
-    }
-
-    _onAnswerOtherNodeFocus(answer) {
-        if (Utils.isEmpty(this._storedOtherValues[answer.code]) || !Utils.isEmpty(this._question.values[answer.code])) {
-            return;
-        }
-
-        this._selectAnswer(answer);
     }
 
     _onOtherInputValueChanged(answer, otherValue) {
@@ -298,4 +268,8 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
     }
 }
 
-
+export class RankingQuestionViewWithStoredOtherValues extends StoredOtherValuesMixin(RankingQuestionView) {
+    constructor(question, settings) {
+        super(question, settings, new RankingOtherValuesKeeper(question, settings));
+    }
+}

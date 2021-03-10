@@ -91,15 +91,12 @@ export default class SingleQuestion extends QuestionWithAnswers {
     }
 
     /**
-     * Other value.
-     * @type {?string}
+     * `{<answerCode>: <otherValue>}`
+     * @type {object}
      * @readonly
      */
-    get otherValue() {
-        if (Utils.isEmpty(this._value))
-            return null;
-
-        return this._otherValues[this._value] || null;
+    get otherValues() {
+        return { ...this._otherValues };
     }
 
     /**
@@ -132,7 +129,7 @@ export default class SingleQuestion extends QuestionWithAnswers {
         if(answer){
             form[answer.fieldName] = this.value;
             if(answer.isOther){
-                form[answer.otherFieldName] = this.otherValue;
+                form[answer.otherFieldName] = this.otherValues[this.value];
             }
         }
 
@@ -153,13 +150,13 @@ export default class SingleQuestion extends QuestionWithAnswers {
 
     /**
      * Set other answer value.
-     * @param {string} otherValue - other value.
+     * @param {string} answerCode - Answer code.
+     * @param {string} otherValue -Other value.
      */
-    setOtherValue(otherValue) {
+    setOtherValue(answerCode, otherValue) {
         this._setValueInternal(
-            'otherValue',
-            () => this._setOtherValue(this._value, otherValue),
-            this._diffPrimitives,
+            'otherValues',
+            () => this._setOtherValue(answerCode, otherValue)
         );
     }
 
@@ -175,8 +172,6 @@ export default class SingleQuestion extends QuestionWithAnswers {
                 return false;
             }
         }
-
-        delete this._otherValues[this._value];
 
         this._value = value;
 
@@ -207,7 +202,7 @@ export default class SingleQuestion extends QuestionWithAnswers {
             return new RuleValidationResult(true);
 
         let answer = this.getAnswer(this.value);
-        let isValid = !answer.isOther || !Utils.isEmpty(this.otherValue);
+        let isValid = !answer.isOther || !Utils.isEmpty(this.otherValues[this.value]);
         return new RuleValidationResult(isValid, [this.value]);
     }
 

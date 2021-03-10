@@ -180,10 +180,10 @@ const SearchableQuestionMixin = base => class extends base {
             !answers.some(answer => answer.code === selectedAnswer.code)));
     }
 
-    _onChange(changes) {
+    _onChange(changes, previousState) {
         this._updateSelectedAnswers(changes);
         this._updateAnswers();
-        super._onChange(changes);
+        super._onChange(changes, previousState);
     }
 
     /**

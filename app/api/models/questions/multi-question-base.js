@@ -94,7 +94,7 @@ export default class MultiQuestionBase extends QuestionWithAnswers {
     /**
      * Set other answer value.
      * @param {string} answerCode - Answer code.
-     * @param {string} otherValue -Other value.
+     * @param {string} otherValue - Other value.
      */
     setOtherValue(answerCode, otherValue) {
         this._setValueInternal(

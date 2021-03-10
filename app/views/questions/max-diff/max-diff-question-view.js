@@ -18,11 +18,11 @@ export default class MaxDiffQuestionView extends QuestionView {
         this._attachHandlersToDOM();
     }
 
-    detachModelHandlers() {
-        super.detachModelHandlers();
+    detach() {
+        super.detach();
 
         this._innerQuestionViews.forEach(questionView => {
-            questionView.detachModelHandlers();
+            questionView.detach();
         });
     }
 

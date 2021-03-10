@@ -129,7 +129,7 @@ export default class RankingQuestion extends QuestionWithAnswers {
     /**
      * Select answer for ranking.
      * @param {string} answerCode - Answer code.
-     * @param {string} answerValue - Answer value.
+     * @param {number} answerValue - Answer value.
      */
     setValue(answerCode, answerValue) {
         this._setValueInternal(

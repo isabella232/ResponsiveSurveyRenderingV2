@@ -1,4 +1,6 @@
 import SingleQuestionView from './single-question-view.js';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {SingleOtherValuesKeeper} from "../helpers/other-values-keeper";
 
 export default class AnswerButtonsSingleQuestionView extends SingleQuestionView {
     /**
@@ -29,5 +31,11 @@ export default class AnswerButtonsSingleQuestionView extends SingleQuestionView 
         this._answerErrorBlockManager.showErrors(errorBlockId, answerNode, errors);
 
         this._addAriaValidationAttributesToAnswerOther(validationResult);
+    }
+}
+
+export class AnswerButtonsSingleQuestionViewWithStoredOtherValues extends StoredOtherValuesMixin(AnswerButtonsSingleQuestionView) {
+    constructor(question, settings) {
+        super(question, settings, new SingleOtherValuesKeeper(question, settings));
     }
 }

@@ -18,6 +18,10 @@ export default class QuestionViewBase {
         this._attachModelHandlers();
     }
 
+    get questionId() {
+        return this._question.id;
+    }
+
     get pendingChangeEvent() {
         return this._pendingChangeEvent;
     }
@@ -32,6 +36,10 @@ export default class QuestionViewBase {
         }
         this._pending = value;
         this._pendingChangeEvent.trigger({id: this._question.id, pending: this._pending});
+    }
+
+    detach() {
+        this.detachModelHandlers();
     }
 
     detachModelHandlers() {

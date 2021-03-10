@@ -15,11 +15,11 @@ export default class Grid3DMobileQuestionView extends QuestionViewBase {
         this._createInnerQuestions();
     }
 
-    detachModelHandlers() {
-        super.detachModelHandlers();
+    detach() {
+        super.detach();
 
         this._innerQuestionViews.forEach(questionView => {
-           questionView.detachModelHandlers();
+           questionView.detach();
         });
     }
 

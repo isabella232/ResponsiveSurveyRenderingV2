@@ -103,6 +103,7 @@
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#side-by-side-views" data-ice="link">Side by side views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#inherit-from-default-views" data-ice="link">Inherit from default views</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#replace-default-view-with-custom" data-ice="link">Replace default view with custom</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/customViews.html"><a class="manual-toc-href" href="manual/customViews.html#detach-question-views" data-ice="link">Detach question views</a></li>
 </ul>
   </div>
 <div data-ice="manual" class="nav-anchor">
@@ -111,6 +112,7 @@
     <li data-ice="manualNav" class="indent-h1" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html" data-ice="link">Custom questions</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#disabling-default-rendering" data-ice="link">Disabling default rendering</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#where-to-put-code" data-ice="link">Where to put code</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#single-slider" data-ice="link">Single slider</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#overview" data-ice="link">Overview</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/customQuestions.html"><a class="manual-toc-href" href="manual/customQuestions.html#implementation" data-ice="link">Implementation</a></li>
@@ -161,13 +163,13 @@
 <h2 id="client-side-events">Client-side events</h2><h3 id="changeevent">ChangeEvent</h3><p>Question model has changeEvent. It can be used like this  </p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint"> question.changeEvent.on(function() {&lt;code&gt;} );</code>
 </code></pre>
-<p>Example:
-you have multi with 5 answer, 3 should be selected. You want to change instruction to show remaining amount of answers. When 3 answers selected - navigate to next page.</p>
+<p><strong>Example:</strong>
+you have multi choice question with 5 answers, 3 should be selected. You want to change instruction to show remaining amount of answers. When 3 answers selected - navigate to next page.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">currentQuestion.changeEvent.on(function (questionModel) {
     var model = questionModel.model;
     var text = &apos;&apos;;
 
-    switch(model.values.length) {
+    switch (model.values.length) {
         case 0:
             text = &apos;Please select 3 items&apos;;
             break;
@@ -185,39 +187,46 @@ you have multi with 5 answer, 3 should be selected. You want to change instructi
     document.querySelector(`.cf-question#${model.id} .cf-question__instruction`).innerHTML = text;
 });</code>
 </code></pre>
-<h3 id="validationevent">ValidationEvent</h3><p>Use validateEvent to apply custom client side validation.<br><strong>If you corrupt validation result object - client-side validation will stop working properly</strong><br>This event is triggered before displaying errors so custom errors added to validationResult will be displayed alongside with default validation errors if any exists.  </p>
+<h3 id="validationevent">ValidationEvent</h3><p>Use validateEvent to apply custom client side validation.<br><strong>If you corrupt validation result object - client-side validation will stop working properly</strong><br>This event is triggered before displaying errors so custom errors added to validationResult will be displayed alongside with default validation errors if any exists.<br><strong>Example:</strong>
+you have multi choice question. If you choose the first answer, the second must also be selected.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">currentQuestion.validationEvent.on(
-  function (validationResult){
-    if(currentQuestion.values.indexOf(&apos;1&apos;) != -1
+  function (validationResult) {
+    if (currentQuestion.values.indexOf(&apos;1&apos;) != -1
        &amp;&amp; currentQuestion.values.indexOf(&apos;2&apos;) == -1 ) {
-      var error = {message: &apos;If a selected - b is required&apos;};
+      var error = {message: &apos;If the first answer is selected - the second is required&apos;};
       validationResult.errors.push(error);
     }  
 });</code>
 </code></pre>
-<p>It&apos;s also possible to bind this validation message to answer &apos;b&apos; directly</p>
+<p>It&apos;s also possible to bind this validation message to second answer directly:</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">currentQuestion.validationEvent.on(
-  function (validationResult){
-    if(currentQuestion.values.indexOf(&apos;1&apos;) != -1
+  function (validationResult) {
+    if (currentQuestion.values.indexOf(&apos;1&apos;) != -1
        &amp;&amp; currentQuestion.values.indexOf(&apos;2&apos;) == -1 ) {
-      var error = {message: &apos;If a selected - b is required&apos;};
+      var error = {message: &apos;If the first answer is selected - the second is required&apos;};
       var errors= [];
       errors.push(error);
-      var answerLelevError = { answerCode : &apos;2&apos;, errors : errors};
-      validationResult.answerValidationResults.push(answerLelevError);
+      var answerErrors = { answerCode : &apos;2&apos;, errors : errors};
+      validationResult.answerValidationResults.push(answerErrors);
     }  
 });</code>
 </code></pre>
 <h3 id="validationcompleteevent">ValidationCompleteEvent</h3><p>Use validationCompleteEvent to display final version of validation.<br><strong>If you corrupt validation result object - client-side validation will stop working properly</strong>  </p>
-<h2 id="server-side-piping">Server side piping</h2><p>To pass information from server use regular ^^ piping</p>
-<pre><code class="lang-javascript"><code class="source-code prettyprint">var q1answer = &quot;^f(&apos;q1&apos;)^&quot;;
-currentQuestion.setValue(`I&apos;ve selected ${q1answer} for first question.`);</code>
+<h2 id="server-side-piping">Server side piping</h2><p>To pass information from server use regular ^^ piping.<br><strong>Example:</strong>
+you have open text question. You need to know which answer was selected in the first question:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">Confirmit.pageView.initCompleteEvent.on(() =&gt; {
+    var q1answer = &quot;^f(&apos;q1&apos;)^&quot;;
+    currentQuestion.setValue(`I&apos;ve selected ${q1answer} for first question.`);
+});</code>
 </code></pre>
-<h2 id="custom-question-experience">Custom question experience</h2><p>Set &apos;disable default rendering&apos; on question skin<br>Write js rendering your html and updating question model  </p>
+<h2 id="custom-question-experience">Custom question experience</h2><p>Set &apos;disable default rendering&apos; on question skin (see <em>Custom Questions</em> section).
+Write js rendering your html and updating question model.</p>
 <h3 id="custom-jquery-slider-example">Custom jQuery slider example</h3><p>Add jQuery and jQueryUI js files to question theme as external js files.</p>
 <pre><code class="lang-log"><code class="source-code prettyprint">https://code.jquery.com/jquery-3.2.1.min.js,  https://code.jquery.com/ui/1.12.1/jquery-ui.min.js  </code>
 </code></pre>
-<p>Code to put into JavaScript section:  </p>
+<p>Add the jQueryUI css file to the question theme as an external css file.</p>
+<pre><code><code class="source-code prettyprint">https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css</code>
+</code></pre><p>Code to put into JavaScript section:  </p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">$(function() {
     var container = $(&apos;.cf-question[data-question-id=&apos; + currentQuestion.id + &apos;]&apos;);
 

@@ -1950,9 +1950,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "app/api/models/questions/single-question.js~singlequestion#othervalue",
-    "class/app/api/models/questions/single-question.js~SingleQuestion.html#instance-get-otherValue",
-    "app/api/models/questions/single-question.js~SingleQuestion#otherValue",
+    "app/api/models/questions/single-question.js~singlequestion#othervalues",
+    "class/app/api/models/questions/single-question.js~SingleQuestion.html#instance-get-otherValues",
+    "app/api/models/questions/single-question.js~SingleQuestion#otherValues",
     "member"
   ],
   [

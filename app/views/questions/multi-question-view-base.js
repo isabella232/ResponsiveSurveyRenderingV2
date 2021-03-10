@@ -17,8 +17,6 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
         this._currentAnswerIndex = null;
         this._collapsibleGroups = this._createCollapsibleGroups();
 
-        this._storedOtherValues = {...this._question.otherValues};
-
         this._attachHandlersToDOM();
     }
 
@@ -78,7 +76,6 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
                 otherInput.on('click', e => e.stopPropagation());
                 otherInput.on('keydown', e => e.stopPropagation());
                 otherInput.on('input', e => this._onAnswerOtherNodeValueChange(answer, e.target.value));
-                otherInput.on('focus', () => this._onAnswerOtherNodeFocus(answer));
             }
         });
 
@@ -178,29 +175,9 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
                         .attr('aria-hidden', 'false')
                         .attr('disabled', null);
                 });
-
-            values.forEach(answerCode => {
-                const checked = this._getSelectedAnswerCodes().includes(answerCode);
-                const cached = !Utils.isEmpty(this._storedOtherValues[answerCode]);
-
-                if (checked && cached) {
-                    this._question.setOtherValue(answerCode, this._storedOtherValues[answerCode]);
-                    delete this._storedOtherValues[answerCode];
-                }
-            });
         }
 
         super._updateAnswerOtherNodes({otherValues});
-    }
-
-    _updateStoredOtherValues({values = []}) {
-        values.forEach(answerCode => {
-            const checked = this._getSelectedAnswerCodes().includes(answerCode);
-            if (!checked) {
-                this._storedOtherValues[answerCode] = this._question.otherValues[answerCode];
-                this._question.setOtherValue(answerCode, null);
-            }
-        });
     }
 
     _isSelected(answer) {
@@ -296,7 +273,6 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
     _onModelValueChange({changes}) {
         this._updateAnswerNodes(changes);
         this._updateAnswerOtherNodes(changes);
-        this._updateStoredOtherValues(changes);
     }
 
     _onAnswerNodeClick(answer) {
@@ -310,14 +286,6 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
 
     _onAnswerNodeFocus(answerIndex) {
         this._currentAnswerIndex = answerIndex;
-    }
-
-    _onAnswerOtherNodeFocus(answer) {
-        if (Utils.isEmpty(this._storedOtherValues[answer.code])) {
-            return;
-        }
-
-        this._selectAnswer(answer);
     }
 
     _onKeyPress(event) {

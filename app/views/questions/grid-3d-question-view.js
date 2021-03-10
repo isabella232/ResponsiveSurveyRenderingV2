@@ -15,9 +15,9 @@ export default class Grid3DQuestionView extends QuestionView {
         this._desktopView = new Grid3DDesktopQuestionView(question, settings);
     }
 
-    detachModelHandlers() {
-        this._mobileView.detachModelHandlers();
-        this._desktopView.detachModelHandlers();
+    detach() {
+        this._mobileView.detach();
+        this._desktopView.detach();
     }
 
     _showErrors() {

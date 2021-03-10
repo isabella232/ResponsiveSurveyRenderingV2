@@ -1,5 +1,7 @@
 import MultiQuestionViewBase from './multi-question-view-base';
 import MultiCountHelper from '../helpers/multi-count-helper';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {MultiOtherValuesKeeper} from "../helpers/other-values-keeper";
 
 export default class MultiQuestionView extends MultiQuestionViewBase {
     /**
@@ -40,5 +42,11 @@ export default class MultiQuestionView extends MultiQuestionViewBase {
      */
     _unselectAnswer(answer) {
         this._question.setValue(answer.code, false);
+    }
+}
+
+export class MultiQuestionViewWithStoredOtherValues extends StoredOtherValuesMixin(MultiQuestionView) {
+    constructor(question, settings) {
+        super(question, settings, new MultiOtherValuesKeeper(question, settings));
     }
 }

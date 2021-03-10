@@ -27,8 +27,8 @@ export default class RankByDragQuestionView extends QuestionWithAnswersView {
         this._attachToDom();
     }
 
-    detachModelHandlers() {
-        super.detachModelHandlers();
+    detach() {
+        super.detach();
 
         $(window)
             .off('mousemove', this._onDocumentMouseMove)

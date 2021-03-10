@@ -90,8 +90,9 @@ export default class cfApi {
 
     _onQuestionChangeDebugHandler({model}) {
         if(model.value !== undefined) {
+            const otherValues = Object.entries(model.otherValues).map(([key, value]) => `${key}:${value}`);
             // eslint-disable-next-line no-console
-            console.log(`Q(${model.id}) value: ${model.value}; other: ${model.otherValue}`);
+            console.log(`Q(${model.id}) value: ${model.value}; others: ${otherValues}`);
         } else if  (model.values !== undefined) {
             const values = Object.keys(model.values).map(key => `${key}:${model.values[key]}`);
             const otherValues = Object.entries(model.otherValues).map(([key, value]) => `${key}:${value}`);

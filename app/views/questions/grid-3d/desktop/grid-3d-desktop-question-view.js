@@ -29,11 +29,11 @@ export default class Grid3DDesktopQuestionView extends QuestionViewBase {
 
 
 
-    detachModelHandlers() {
-        super.detachModelHandlers();
+    detach() {
+        super.detach();
 
         this._innerQuestionViews.forEach(questionView => {
-            questionView.detachModelHandlers();
+            questionView.detach();
         });
     }
 

@@ -4,6 +4,8 @@ import Utils from './../../utils.js';
 import ValidationTypes from '../../api/models/validation/validation-types';
 import CollapsibleGroup from '../controls/collapsible-group';
 import GroupTypes from '../../api/group-types';
+import StoredOtherValuesMixin from "./base/stored-other-values-mixin";
+import {SingleOtherValuesKeeper} from "../helpers/other-values-keeper";
 
 export default class SingleQuestionView extends QuestionWithAnswersView {
     /**
@@ -17,8 +19,6 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
         this._currentAnswerIndex = null;
         this._collapsibleGroups = this._createCollapsibleGroups();
 
-        this._storedOtherValues = this._question.value !== null ? {[this._question.value]: this._question.otherValue} : {};
-
         this._attachHandlersToDOM();
     }
 
@@ -29,7 +29,7 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
     _createCollapsibleGroups() {
         const prepareCollapsibleGroupShortInfo = (question, group) => {
             const answer = question.getAnswer(question.value);
-            return group.items.includes(answer) ? [answer.isOther ? question.otherValue : answer.text] : [];
+            return group.items.includes(answer) ? [answer.isOther ? question.otherValues[question.value] : answer.text] : [];
         };
 
         return this._question.answerGroups
@@ -46,7 +46,6 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
                 const otherInput = this._getAnswerOtherNode(answer.code);
                 otherInput.on('click', e => e.stopPropagation());
                 otherInput.on('keydown', e => e.stopPropagation());
-                otherInput.on('focus', () => this._onAnswerOtherNodeFocus(answer));
                 otherInput.on('input', e => this._onAnswerOtherNodeValueChange(answer, e.target.value));
             }
         });
@@ -61,7 +60,7 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
 
         if (answer.isOther) {
             const otherInput = this._getAnswerOtherNode(answer.code);
-            this._question.setOtherValue(otherInput.val());
+            this._question.setOtherValue(answer.code, otherInput.val());
             if (Utils.isEmpty(otherInput.val())) {
                 otherInput.focus();
             }
@@ -110,13 +109,6 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
         this._selectAnswerNode(this._question.getAnswer(this._question.value));
     }
 
-    // eslint-disable-next-line no-unused-vars
-    _updateStoredOtherValues(changes) {
-        if (!Utils.isEmpty(this._question.otherValue)) {
-            this._storedOtherValues[this._question.value] = this._question.otherValue;
-        }
-    }
-
     _getSelectedAnswerClass(answer) {
         return answer.imagesSettings !== null ? 'cf-image-answer--selected' : 'cf-radio-answer--selected';
     }
@@ -127,37 +119,13 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
 
     _updateAnswerOtherNodes(changes) {
         this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-            if (this._question.value !== answer.code) {
-                this._setOtherNodeValue(answer.code, null);
-            }
-
+            const selected = this._question.value === answer.code;
             this._getAnswerOtherNode(answer.code)
-                .attr('tabindex', '-1')
-                .attr('aria-hidden', 'true');
+                .attr('tabindex', selected ? '0' : '-1')
+                .attr('aria-hidden', selected ? 'false' : 'true');
         });
 
-        if (this._question.value === null) {
-            return;
-        }
-
-        if (this._question.getAnswer(this._question.value).isOther) {
-            this._getAnswerOtherNode(this._question.value)
-                .attr('tabindex', '0')
-                .attr('aria-hidden', 'false');
-        }
-
-        if (changes.otherValue) {
-            this._setOtherNodeValue(this._question.value, this._question.otherValue);
-            return;
-        }
-
-        const checked = changes.value && this._question.value !== null;
-        const cached = !Utils.isEmpty(this._storedOtherValues[this._question.value]);
-
-        if (checked && cached) {
-            this._question.setOtherValue(this._storedOtherValues[this._question.value]);
-            delete this._storedOtherValues[this._question.value];
-        }
+        super._updateAnswerOtherNodes(changes);
     }
 
     /**
@@ -221,7 +189,6 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
     _onModelValueChange({changes}) {
         this._updateAnswerNodes(changes);
         this._updateAnswerOtherNodes(changes);
-        this._updateStoredOtherValues(changes);
     }
 
     _onAnswerNodeClick(answer) {
@@ -285,22 +252,19 @@ export default class SingleQuestionView extends QuestionWithAnswersView {
         this._currentAnswerIndex = answerIndex;
     }
 
-    _onAnswerOtherNodeFocus(answer) {
-        if (Utils.isEmpty(this._storedOtherValues[answer.code])) {
-            return;
-        }
-
-        this._question.setValue(answer.code);
-    }
-
     _onAnswerOtherNodeValueChange(answer, otherValue) {
         if (!Utils.isEmpty(otherValue)) { // select answer
             this._question.setValue(answer.code);
         }
 
         if (this._question.value === answer.code) { // update other value for currently selected answer
-            this._question.setOtherValue(otherValue);
+            this._question.setOtherValue(answer.code, otherValue);
         }
     }
 }
 
+export class SingleQuestionViewWithStoredOtherValues extends StoredOtherValuesMixin(SingleQuestionView) {
+    constructor(question, settings) {
+        super(question, settings, new SingleOtherValuesKeeper(question, settings));
+    }
+}

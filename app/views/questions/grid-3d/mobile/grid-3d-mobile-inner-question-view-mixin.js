@@ -19,8 +19,8 @@ const Grid3DMobileInnerQuestionViewMixin = base => class extends base {
         return new MobileQuestionIdProvider(questionId);
     }
 
-    detachModelHandlers() {
-        super.detachModelHandlers();
+    detach() {
+        super.detach();
         this._detachParentModelHandlers();
     }
 

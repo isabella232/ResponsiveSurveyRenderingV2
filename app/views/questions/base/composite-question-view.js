@@ -17,9 +17,9 @@ export default class CompositeQuestionView extends QuestionView {
         });
     }
 
-    detachModelHandlers() {
+    detach() {
         this._questionViews.forEach(view => {
-            view.detachModelHandlers();
+            view.detach();
             view.pendingChangeEvent.off(this._onQuestionViewPendingChange);
         });
     }
