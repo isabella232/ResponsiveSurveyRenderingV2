@@ -28,6 +28,7 @@ import CarouselHorizontalRatingGridQuestionView from './questions/carousel-horiz
 import CarouselGridBarsGridQuestionView from './questions/carousel-grid-bars-grid-question-view.js';
 import CarouselStarRatingGridQuestionView from './questions/carousel-star-rating-grid-question-view.js';
 import AccordionGridQuestionView from './questions/accordion-grid-question-view.js';
+import CardSortGridQuestionView from './questions/card-sort-grid-question-view.js';
 import DropdownSingleQuestionView from './questions/dropdown-single-question-view.js';
 import DropdownGridQuestionView from './questions/dropdown-grid-question-view.js';
 import DropdownHierarchyQuestionView from './questions/dropdown-hierarchy-question-view';
@@ -180,6 +181,10 @@ export default class QuestionViewFactory {
 
         if (model.slider) {
             return new SliderGridQuestionView(model, this._questionViewSettings);
+        }
+
+        if(model.cardSort){
+            return new CardSortGridQuestionView(model, this._questionViewSettings);
         }
 
         return new GridQuestionView(model, this._questionViewSettings);

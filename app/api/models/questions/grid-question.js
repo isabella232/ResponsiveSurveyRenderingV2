@@ -17,7 +17,10 @@ export default class GridQuestion extends GridQuestionBase {
         this._accordion = model.accordion || false;
         this._carousel = model.carousel || false;
         this._dropdown = model.dropdown || false;
+        this._ranking = model.ranking || false;
         this._slider = model.slider || false;
+        this._cardSort = model.cardSort || false;
+        this._cardSortLayout = model.cardSortLayout || 0;
         this._sliderIsVertical = model.sliderIsVertical || false;
         this._layoutColumns = model.layoutColumns || 0;
         this._layoutRows = model.layoutRows || 0;
@@ -64,6 +67,15 @@ export default class GridQuestion extends GridQuestionBase {
     }
 
     /**
+     * Is ranking.
+     * @type {boolean}
+     * @readonly
+     */
+    get ranking(){
+        return this._ranking;
+    }
+
+    /**
      * Is slider vertical.
      * @type {boolean}
      * @readonly
@@ -106,6 +118,24 @@ export default class GridQuestion extends GridQuestionBase {
      */
     get answerButtons() {
         return this._answerButtons;
+    }
+
+    /**
+     * Is it card sort
+     * @type {boolean}
+     * @readonly
+     */
+    get cardSort() {
+        return this._cardSort;
+    }
+
+    /**
+     * Card sort layout id.
+     * @type {boolean}
+     * @readonly
+     */
+    get cardSortLayout(){
+        return this._cardSortLayout;
     }
 
     /**

@@ -29,7 +29,7 @@
 		<ul class="nav navbar-nav">
 			<li><a href="./index.html" data-ice="manualHeaderLink"> Articles and Guides </a></li>
 			<li><a href="identifiers.html" data-ice="manualHeaderLink">Library <div class="label label-default">API</div></a></li>
-			<li><a href="https://github.com/Confirmit/ResponsiveRendering"><img width="20px" src="./image/github.png"></a></li>
+			<li><a href="https://github.com/Confirmit/ResponsiveSurveyRenderingV2"><img width="20px" src="./image/github.png"></a></li>
 		</ul>
             <div class="pull-right">
                  <div class="search-box">
@@ -50,7 +50,7 @@
 <div data-ice="manual" class="nav-anchor">
     <ul class="manual-toc">
       
-    <li data-ice="manualNav" class="indent-h1" data-link="manual/index.html"><a class="manual-toc-href" href="manual/index.html" data-ice="link">Confirmit Responsive Survey Rendering documentation</a></li>
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/index.html"><a class="manual-toc-href" href="manual/index.html" data-ice="link">Confirmit Responsive Survey Rendering V2 documentation</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/index.html"><a class="manual-toc-href" href="manual/index.html#what-is-it-" data-ice="link">What is it?</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/index.html"><a class="manual-toc-href" href="manual/index.html#how-to-start-using" data-ice="link">How to start using</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/index.html"><a class="manual-toc-href" href="manual/index.html#key-concepts" data-ice="link">Key concepts</a></li>
@@ -150,21 +150,81 @@
     <ul class="manual-toc">
       
     <li data-ice="manualNav" class="indent-h1" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html" data-ice="link">Confirmit Responsive Rendering versioning</a></li>
-<li data-ice="manualNav" class="indent-h2" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#rendering-version" data-ice="link">Rendering Version</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#what-is-rendering-version-" data-ice="link">What is Rendering Version?</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#existing-versions" data-ice="link">Existing versions</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#key-differences-between-v2--current-documentation--and-v1-versions" data-ice="link">Key differences between V2 (current documentation) and V1 versions</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#user-experience" data-ice="link">User experience</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#markup-changes" data-ice="link">Markup changes</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/versioning.html"><a class="manual-toc-href" href="manual/versioning.html#responsive-client-api--models-layer-" data-ice="link">Responsive client API (models layer)</a></li>
 </ul>
   </div>
 </div></nav>
 <div class="content" data-ice="content">
-<div class="github-markdown" data-ice="content"><h1 id="confirmit-responsive-rendering-versioning">Confirmit Responsive Rendering versioning</h1><p>Rendering versioning is a new concept that allows us to evolve responsive rendering and roll out breaking changes that won&apos;t automatically affect existing surveys.</p>
-<h2 id="rendering-version">Rendering Version</h2><p>The rendering version contains:</p>
+<div class="github-markdown" data-ice="content"><h1 id="confirmit-responsive-rendering-versioning">Confirmit Responsive Rendering versioning</h1><p>Rendering versioning is a new concept that allows responsive rendering to be updated, including making breaking changes that won&apos;t automatically affect existing surveys.</p>
+<h2 id="what-is-rendering-version-">What is Rendering Version?</h2><p>The rendering version contains:</p>
 <ul>
 <li>Server-side markup generation code</li>
 <li>Client-side JavaScript code</li>
 <li>CSS files (style bundles)</li>
 </ul>
-<p>Each responsive survey layout references a specific rendering version. This means that a survey using this layout uses html markup, JavaScript and CSS from this rendering version. It is possible to change the rendering version in the layout properties, and override it in survey settings.
-For layout templates, you have the option of setting the rendering version. If this is not set, it will by default use the latest available version. It will be useful for layouts that only reference style bundles but do not contain any version-specific customizations.
-For surveys, it is mandatory to have the rendering version selected. When a survey is created its rendering version will be fixed (to the version supported by the layout), and it will not automatically change later even if new versions become available.</p>
+<p>Every responsive survey layout references a specific rendering version. This means that a survey using this layout uses HTML markup, JavaScript and CSS from this rendering version. It is possible to change the rendering version in the layout properties.
+For layout templates, you have the option of setting the rendering version. If this is not set, it will use the latest available version by default. This is useful for layouts that only reference style bundles but do not contain any version-specific customizations.</p>
+<h2 id="existing-versions">Existing versions</h2><ul>
+<li>V2 version - latest and current documentation version</li>
+<li><a href="./manual/./../../ResponsiveSurveyRenderingV1">V1 version</a> </li>
+</ul>
+<h2 id="key-differences-between-v2--current-documentation--and-v1-versions">Key differences between V2 (current documentation) and V1 versions</h2><h3 id="user-experience">User experience</h3><ul>
+<li>Grid question supports &quot;Card sort&quot; appearance</li>
+<li>Grid question supports &quot;Ranking card sort&quot; appearance</li>
+<li>3D-grid supports new inner question types such as &quot;Horizontal rating scale&quot;, &quot;Grid bars&quot;, &quot;Star rating&quot; and &quot;Slider&quot;</li>
+<li>Answer colors support</li>
+<li>Repeat headers and bottom headers support in Grid and 3D-grid</li>
+<li>Slider grid supports label panel</li>
+<li>Multi question types supports enforcing the &quot;max number of answers&quot; setting</li>
+<li>Increased rating item sizes in &quot;Whitespace&quot; style bundle</li>
+<li>Improved accessibility support</li>
+</ul>
+<h3 id="markup-changes">Markup changes</h3><ul>
+<li><p>Grid, MultiGrid and Rating grids use two markups for mobile and desktop versions.</p>
+<blockquote>
+<p>In rendering version V1 the grid family has one markup for both mobile and desktop sizes which can cause problems with space distribution.
+Also mobile and desktop versions had different functionality with extra markup, that was not used in both versions.
+yet at the same time still needed to maintain a quite different set of CSS style for mobile and desktop version.<br>As a result, in V2 rendering, the grid family uses two standalone markups for mobile and desktop versions with corresponding standalone views that are bound to one question model.</p>
+</blockquote>
+</li>
+<li><p>3D-grid&apos;s mobile version uses the same markup for an inner question as for a regular version. For example, 3D-grid&apos;s inner single has the same as a regular single.</p>
+<blockquote>
+<p>In rendering version V1 the mobile version of 3D-grid inner question uses its own implementation of markup and corresponding &quot;View&quot;, but tries to mimic the original question type. 
+This led to extra effort if you tried to do visual customization.<br>In rendering version V2 mobile 3D-grid inner questions use the same markup and corresponding View as in regular question types.</p>
+</blockquote>
+</li>
+<li><p>All questions support a generic scrollable container.</p>
+<blockquote>
+<p>In rendering version V1 there is no scrollable container for a question&apos;s content which results in breaking the question layout or even the page layout is there is oversized content.<br>In rendering version V2 there is a generic scrollable container to cater for this.</p>
+</blockquote>
+</li>
+<li><p>Extracted repeated visual elements to standalone reusable markup blocks.</p>
+<blockquote>
+<p>In rendering version V1, part of an identical-looking element on the page has completely different HTML markups.
+For example radio/checkbox answers or label panels in rating types.<br>In rendering version V2 the logical shared visual elements have been extracted to standalone markup blocks, resulting in customization
+requiring changing styles for one markup block only. Affected elements: radio, checkbox, answer button, answer image, rating items/scales and label panel.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="responsive-client-api--models-layer-">Responsive client API (models layer)</h3><ul>
+<li><p>Single other value is now aligned with the other question types</p>
+<blockquote>
+<p>In rendering version V1 the SingleQuestionModel has a different interaction compared to the other models with &quot;other&quot; values, (it was needed to set value first, then after that set &quot;other&quot; value).<br>In rendering version V2 all question models that have &quot;other&quot; values behave the same way, the interaction with &quot;other&quot; values is now independent from model value.<br>Changes in syntax: V1:<code>SingleModel.setOtherValue(otherValue)</code> -&gt; V2:<code>SingleModel.setOtherValue(answerCode, otherValue)</code></p>
+</blockquote>
+</li>
+<li><p>Introduced &quot;detached&quot; method on question view.</p>
+<blockquote>
+<p>In rendering version V2 if you need to release resources (for example: detach from DOM, detach from Model, destroy WebGL context or make any cleanup) before the View will be destroyed, you can implement a &quot;detach&quot; method, where you can do those things.</p>
+</blockquote>
+</li>
+<li><p>Improved validation of 3D-grid questions</p>
+</li>
+</ul>
 </div>
 </div>
 

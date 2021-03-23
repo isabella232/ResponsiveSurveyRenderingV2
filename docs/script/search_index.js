@@ -1260,6 +1260,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "app/api/models/questions/grid-question.js~gridquestion#cardsort",
+    "class/app/api/models/questions/grid-question.js~GridQuestion.html#instance-get-cardSort",
+    "app/api/models/questions/grid-question.js~GridQuestion#cardSort",
+    "member"
+  ],
+  [
+    "app/api/models/questions/grid-question.js~gridquestion#cardsortlayout",
+    "class/app/api/models/questions/grid-question.js~GridQuestion.html#instance-get-cardSortLayout",
+    "app/api/models/questions/grid-question.js~GridQuestion#cardSortLayout",
+    "member"
+  ],
+  [
     "app/api/models/questions/grid-question.js~gridquestion#carousel",
     "class/app/api/models/questions/grid-question.js~GridQuestion.html#instance-get-carousel",
     "app/api/models/questions/grid-question.js~GridQuestion#carousel",
@@ -1287,6 +1299,12 @@ window.esdocSearchIndex = [
     "app/api/models/questions/grid-question.js~gridquestion#layoutrows",
     "class/app/api/models/questions/grid-question.js~GridQuestion.html#instance-get-layoutRows",
     "app/api/models/questions/grid-question.js~GridQuestion#layoutRows",
+    "member"
+  ],
+  [
+    "app/api/models/questions/grid-question.js~gridquestion#ranking",
+    "class/app/api/models/questions/grid-question.js~GridQuestion.html#instance-get-ranking",
+    "app/api/models/questions/grid-question.js~GridQuestion#ranking",
     "member"
   ],
   [
