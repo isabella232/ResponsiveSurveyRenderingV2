@@ -23,7 +23,7 @@ html
 }
 
 body{
-	background-color: #FFFFFF; */
+	background-color: #FFFFFF;
 }
 
 a {
@@ -83,6 +83,10 @@ del {
 p {
   margin-bottom: 15px;
   line-height: 1.5;
+}
+
+blockquote {
+  font-size: 13px;
 }
 
 code {
