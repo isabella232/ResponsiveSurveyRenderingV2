@@ -23,6 +23,11 @@ export default class SliderNumericQuestionView extends QuestionView {
         this._slider.changeEvent.on(() => this._onSliderChange());
     }
 
+    detach() {
+        super.detach();
+        this._slider.detach();
+    }
+
     _generateSliderValues() {
         const values = [];
         const valueStep = 1 / Math.pow(10, this._question.numeric.scale);

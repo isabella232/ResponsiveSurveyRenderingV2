@@ -83,7 +83,7 @@
 }
 
 @include ie-only-wrapper {
-  .cf-table-layout-cell--row-head .cf-table-layout-cell__content {
+  .cf-desktop-hrs-grid__table .cf-table-layout-cell--row-head .cf-table-layout-cell__content {
     flex: 1 1 1.5em;
   }
 

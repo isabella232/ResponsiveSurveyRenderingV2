@@ -11,6 +11,14 @@ export default class Grid3DDesktopInnerSliderGridQuestionView extends Grid3DDesk
         this._init();
     }
 
+    detach() {
+        super.detach()
+
+        for (let slider of this._sliders.values()) {
+            slider.detach();
+        }
+    }
+
     _init() {
         const sliderValues = this._question.scales.map(scale => scale.code);
         const sliderTextValueHandler = (sliderValue) => {

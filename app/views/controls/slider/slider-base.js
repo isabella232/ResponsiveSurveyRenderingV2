@@ -1,5 +1,5 @@
 import Event from 'event.js';
-import KEYS from "../../helpers/keyboard-keys";
+import KEYS from '../../helpers/keyboard-keys';
 import Utils from 'utils.js';
 import $ from 'jquery';
 
@@ -13,7 +13,14 @@ export default class SliderBase {
      * @param isProgressSlider {boolean} is slider have progress indication on track
      * @param readOnly {boolean} is slider has to be in read only mode
      */
-    constructor(sliderNodeId, values = [], value = null, textValueHandler = null, isProgressSlider = false, readOnly = false) {
+    constructor(
+        sliderNodeId,
+        values = [],
+        value = null,
+        textValueHandler = null,
+        isProgressSlider = false,
+        readOnly = false
+    ) {
         this._values = values;
         this._valueIndex = -1;
         this._handleIndex = -1;
@@ -53,7 +60,7 @@ export default class SliderBase {
      * @param newValue
      */
     set value(newValue) {
-        this._setValueIndex(this._values.findIndex(value => value === newValue));
+        this._setValueIndex(this._values.findIndex((value) => value === newValue));
     }
 
     /**
@@ -101,13 +108,16 @@ export default class SliderBase {
      * @param newValue
      */
     setValueSilently(newValue) {
-        this._setValueIndex(this._values.findIndex(value => value === newValue), true);
+        this._setValueIndex(
+            this._values.findIndex((value) => value === newValue),
+            true
+        );
     }
 
     /**
      * Detach slider control from DOM
      */
-    detachFromDOM() {
+    detach() {
         this._trackNode.off('click', this._onTrackClick);
         this._noValueNode.off('click', this._onNoValueNodeClick);
 
@@ -138,7 +148,7 @@ export default class SliderBase {
 
     // TODO: make an optimization for a large number of values, when interval less than one pixel.
     _calculateTrackIntervals() {
-        const intervalSize = 100 / (this._values.length);
+        const intervalSize = 100 / this._values.length;
         for (let i = 0; i < this._values.length; i++) {
             let startInterval = Utils.round(i * intervalSize, 2);
             let endInterval = Utils.round((i + 1) * intervalSize, 2);
@@ -186,15 +196,15 @@ export default class SliderBase {
 
     _getValueIndexByTrackValue(trackValue) {
         const search = (minIndex, maxIndex) => {
-            if(minIndex > maxIndex) {
+            if (minIndex > maxIndex) {
                 return -1;
             }
             const midIndex = Math.floor((minIndex + maxIndex) / 2);
             const interval = this._trackIntervals[midIndex];
-            if(trackValue < interval[0]) {
+            if (trackValue < interval[0]) {
                 return search(minIndex, midIndex - 1);
             }
-            if(trackValue > interval[1]) {
+            if (trackValue > interval[1]) {
                 return search(midIndex + 1, maxIndex);
             }
             return midIndex;
@@ -218,7 +228,7 @@ export default class SliderBase {
 
         this._moveEvent.trigger(this._values[this._handleIndex] || null);
 
-        if(!isSilent) {
+        if (!isSilent) {
             this._changeEvent.trigger();
         }
     }
@@ -237,56 +247,56 @@ export default class SliderBase {
     }
 
     _getTrackValueByInterval(interval) {
-        return Utils.floor(((interval[0] + interval[1]) / 2), 2);
+        return Utils.floor((interval[0] + interval[1]) / 2, 2);
     }
 
     // eslint-disable-next-line no-unused-vars
     _setProgressNodeSize(progressValue) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     // eslint-disable-next-line no-unused-vars
     _setHandleNodePosition(position) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getTrackNodeSize() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getHandleNodeSize() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getHandleNodeMargin() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getNoValueNodeOffset() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getTrackNodeOffset() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _getNoValueHandleNodePosition() {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     // eslint-disable-next-line no-unused-vars
     _getMouseEventPointerPosition(event) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     // eslint-disable-next-line no-unused-vars
     _getTouchEventPointerPosition(event) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     // eslint-disable-next-line no-unused-vars
     _getPointerPositionOnTheTrack(pointerPosition) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _moveHandleNode(trackValue) {
@@ -309,7 +319,7 @@ export default class SliderBase {
 
     _moveHandleForward() {
         if (this._valueIndex < this._values.length - 1) {
-            this._setValueIndex(this._valueIndex + 1)
+            this._setValueIndex(this._valueIndex + 1);
         }
     }
 
@@ -330,7 +340,7 @@ export default class SliderBase {
     }
 
     _syncProgressToIndexValue() {
-        if(!this._isProgressSlider) {
+        if (!this._isProgressSlider) {
             return;
         }
 
@@ -378,7 +388,7 @@ export default class SliderBase {
                 newIndex = this._values.length - 1;
                 break;
             case KEYS.PageUp:
-                if(this._valueIndex === -1) {
+                if (this._valueIndex === -1) {
                     newIndex = 0;
                 } else {
                     newIndex = this._valueIndex + this._trackPageUpPageDownStep;
@@ -399,7 +409,7 @@ export default class SliderBase {
 
     // eslint-disable-next-line no-unused-vars
     _handleArrowsKeys(keyCode) {
-        throw "Not implemented exception";
+        throw 'Not implemented exception';
     }
 
     _onTrackClick(event) {
@@ -426,7 +436,7 @@ export default class SliderBase {
     }
 
     _onDocumentMouseMove(event) {
-        if (!this._isSliding) {
+        if (!this._isSliding || this._readOnly) {
             return;
         }
 
@@ -488,10 +498,12 @@ export default class SliderBase {
     _onHandleMove(pointerPositionOnTheTrack) {
         this._toggleHandleNodeNoValueCSSModifier(pointerPositionOnTheTrack < 0);
 
-        if (pointerPositionOnTheTrack < 0) { // Out of track
+        if (pointerPositionOnTheTrack < 0) {
+            // Out of track
             this._setProgress(0);
 
-            if (pointerPositionOnTheTrack < this._getNoValueHandleNodePosition()) { // beyond no value position
+            if (pointerPositionOnTheTrack < this._getNoValueHandleNodePosition()) {
+                // beyond no value position
                 this._moveHandleToNoValuePosition();
                 return;
             }
@@ -539,7 +551,16 @@ export default class SliderBase {
     }
 
     _onHandleKeyPress(event) {
-        const allowedKeys = [KEYS.ArrowUp, KEYS.ArrowLeft, KEYS.ArrowRight, KEYS.ArrowDown, KEYS.PageUp, KEYS.PageDown, KEYS.Home, KEYS.End];
+        const allowedKeys = [
+            KEYS.ArrowUp,
+            KEYS.ArrowLeft,
+            KEYS.ArrowRight,
+            KEYS.ArrowDown,
+            KEYS.PageUp,
+            KEYS.PageDown,
+            KEYS.Home,
+            KEYS.End,
+        ];
         if (allowedKeys.includes(event.keyCode) === false) {
             return;
         }

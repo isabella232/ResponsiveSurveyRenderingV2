@@ -10,7 +10,14 @@ export default class MobileHorizontalRatingGridQuestionView extends RatingGridQu
     constructor(question, settings = null) {
         super(question, settings);
 
+        this._floatingPanel = null;
+
         this._initFloatingLabels();
+    }
+
+    detach(){
+        super.detach()
+        this._floatingPanel.detach();
     }
 
     _createIdProvider(questionId) {
@@ -46,6 +53,6 @@ export default class MobileHorizontalRatingGridQuestionView extends RatingGridQu
     _initFloatingLabels() {
         const panel = this._container.find('.cf-floating-panel');
         const lastItem = this._container.find('.cf-mobile-grid-layout__answer--last .cf-horizontal-rating-scale');
-        new FloatingPanel(panel, lastItem, this._settings.mobileThreshold);
+        this._floatingPanel = new FloatingPanel(panel, lastItem, this._settings.mobileThreshold);
     }
 }

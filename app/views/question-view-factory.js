@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import QuestionTypes from 'api/question-types.js'
-import {SingleQuestionViewWithStoredOtherValues} from './questions/single-question-view.js';
-import {MultiQuestionViewWithStoredOtherValues} from './questions/multi-question-view.js';
+import QuestionTypes from 'api/question-types.js';
+import { SingleQuestionViewWithStoredOtherValues } from './questions/single-question-view.js';
+import { MultiQuestionViewWithStoredOtherValues } from './questions/multi-question-view.js';
 import GridQuestionView from './questions/grid/grid-question-view.js';
 import MultiGridQuestionView from './questions/multi-grid/multi-grid-question-view.js';
 import OpenTextListQuestionView from './questions/open-text-list-question-view.js';
@@ -11,11 +11,11 @@ import NumericListQuestionView from './questions/numeric-list-question-view.js';
 import DateQuestionView from './questions/date-question-view.js';
 import DateQuestionPolyfillView from './questions/date-question-polyfill-view.js';
 import EmailQuestionView from './questions/email-question-view';
-import {RankingQuestionViewWithStoredOtherValues} from './questions/ranking-question-view.js';
+import { RankingQuestionViewWithStoredOtherValues } from './questions/ranking-question-view.js';
 import RankByNumberQuestionView from './questions/rank-by-number-question-view';
 import RankByDragQuestionView from './questions/rank-by-drag-question-view';
-import {CaptureOrderMultiQuestionViewWithStoredOtherValues} from './questions/capture-order-multi-question-view';
-import {AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues} from './questions/answer-buttons-capture-order-multi-question-view';
+import { CaptureOrderMultiQuestionViewWithStoredOtherValues } from './questions/capture-order-multi-question-view';
+import { AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues } from './questions/answer-buttons-capture-order-multi-question-view';
 import HorizontalRatingGridQuestionView from './questions/horizontal-rating-grid/horizontal-rating-grid-question-view.js';
 import HorizontalRatingSingleQuestionView from './questions/horizontal-rating-single-question-view.js';
 import GridBarsGridQuestionView from './questions/grid-bars-grid/grid-bars-grid-question-view.js';
@@ -32,22 +32,22 @@ import CardSortGridQuestionView from './questions/card-sort-grid-question-view.j
 import DropdownSingleQuestionView from './questions/dropdown-single-question-view.js';
 import DropdownGridQuestionView from './questions/dropdown-grid-question-view.js';
 import DropdownHierarchyQuestionView from './questions/dropdown-hierarchy-question-view';
-import {AnswerButtonsSingleQuestionViewWithStoredOtherValues} from './questions/answer-buttons-single-question-view.js';
-import {AnswerButtonsMultiQuestionViewWithStoredOtherValues} from './questions/answer-buttons-multi-question-view.js';
+import { AnswerButtonsSingleQuestionViewWithStoredOtherValues } from './questions/answer-buttons-single-question-view.js';
+import { AnswerButtonsMultiQuestionViewWithStoredOtherValues } from './questions/answer-buttons-multi-question-view.js';
 import GeolocationQuestionView from './questions/geolocation-question-view.js';
 import ImageUploadQuestionView from './questions/image-upload-question-view.js';
 import LoginPageQuestionView from './questions/login-page-question-view.js';
 import Grid3DQuestionView from './questions/grid-3d-question-view.js';
 import MaxDiffQuestionView from './questions/max-diff/max-diff-question-view.js';
-import SliderSingleQuestionView from './questions/slider-single-question-view.js';
+import { SliderSingleQuestionViewWithStoredOtherValues } from './questions/slider-single-question-view.js';
 import SliderGridQuestionView from './questions/slider-grid-question-view.js';
 import SliderNumericQuestionView from './questions/slider-numeric-question-view.js';
-import SliderNumericListQuestionView from "./questions/slider-numeric-list-question-view";
+import SliderNumericListQuestionView from './questions/slider-numeric-list-question-view';
 import VideoUploadQuestionView from './questions/video-upload-question-view';
 import AudioUploadQuestionView from './questions/audio-upload-question-view';
-import CodeCaptureQuestionView from "./questions/code-capture-question-view";
-import SearchableMultiQuestionView from "./questions/searchable-multi-question-view";
-import SearchableSingleQuestionView from "./questions/searchable-single-question-view";
+import CodeCaptureQuestionView from './questions/code-capture-question-view';
+import SearchableMultiQuestionView from './questions/searchable-multi-question-view';
+import SearchableSingleQuestionView from './questions/searchable-single-question-view';
 
 /**
  * @desc Question view factory
@@ -130,7 +130,7 @@ export default class QuestionViewFactory {
                 return new LoginPageQuestionView(model);
             case QuestionTypes.Hierarchy:
                 return new DropdownHierarchyQuestionView(model, this._questionViewSettings);
-            case  QuestionTypes.SearchableMulti:
+            case QuestionTypes.SearchableMulti:
                 return new SearchableMultiQuestionView(model, this._questionViewSettings);
             case QuestionTypes.SearchableSingle:
                 return new SearchableSingleQuestionView(model, this._questionViewSettings);
@@ -145,7 +145,7 @@ export default class QuestionViewFactory {
         }
 
         if (model.slider) {
-            return new SliderSingleQuestionView(model, this._questionViewSettings);
+            return new SliderSingleQuestionViewWithStoredOtherValues(model, this._questionViewSettings);
         }
 
         if (model.answerButtons) {
@@ -183,7 +183,7 @@ export default class QuestionViewFactory {
             return new SliderGridQuestionView(model, this._questionViewSettings);
         }
 
-        if(model.cardSort){
+        if (model.cardSort) {
             return new CardSortGridQuestionView(model, this._questionViewSettings);
         }
 
@@ -256,7 +256,10 @@ export default class QuestionViewFactory {
 
     _createRankingQuestionView(model) {
         if (model.captureOrder && model.answerButtons) {
-            return new AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues(model, this._questionViewSettings);
+            return new AnswerButtonsCaptureOrderMultiQuestionViewWithStoredOtherValues(
+                model,
+                this._questionViewSettings
+            );
         }
 
         if (model.captureOrder) {
@@ -264,7 +267,7 @@ export default class QuestionViewFactory {
         }
 
         if (model.rankByDrag) {
-            return new RankByDragQuestionView(model, this._questionViewSettings)
+            return new RankByDragQuestionView(model, this._questionViewSettings);
         }
 
         if (model.rankByNumber) {

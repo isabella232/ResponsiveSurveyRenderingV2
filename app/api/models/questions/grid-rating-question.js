@@ -28,21 +28,21 @@ export default class GridRatingQuestion extends GridQuestionBase {
     }
 
     /**
-     * `{<answerCode>: <scaleCode>...}`
-     * @type {object}
+     * Scales in rating scale; If option "Exclude Non-scored" is enabled, it contains only scales with score.
+     * @type {Scale[]}
      * @readonly
      */
     get scaleItems() {
-        return [ ...this._scaleItems ];
+        return [...this._scaleItems];
     }
 
     /**
-     * Array of Scales without a score.
+     * Scales not in rating scale; If option "Exclude Non-scored" is enabled, it contains only scales without score, Otherwise it's empty collection.
      * @type {Scale[]}
      * @readonly
      */
     get nonScaleItems() {
-        return [ ...this._nonScaleItems ];
+        return [...this._nonScaleItems];
     }
 
     _loadScales({ scaleItems = [], nonScaleItems = [] }) {

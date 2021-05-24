@@ -13,8 +13,15 @@ export default class SliderGridQuestionView extends QuestionWithAnswersView {
         super(question, settings);
 
         this._sliders = new Map();
+        this._floatingPanel = null;
 
         this._init();
+    }
+
+    detach(){
+        super.detach();
+        this._sliders.forEach(slider => slider.detach());
+        this._floatingPanel.detach();
     }
 
     _init() {
@@ -48,7 +55,7 @@ export default class SliderGridQuestionView extends QuestionWithAnswersView {
     _initFloatingLabels() {
         const panelNode = this._container.find('.cf-slider-grid-answer--fake-for-panel .cf-floating-panel');
         const lastItemNode = this._container.find('.cf-slider-grid-answer').last();
-        new FloatingPanel(panelNode, lastItemNode, this._settings.mobileThreshold);
+        this._floatingPanel = new FloatingPanel(panelNode, lastItemNode, this._settings.mobileThreshold);
     }
 
     _createSlider(sliderNode, sliderValues, sliderValue, textValueHandler) {

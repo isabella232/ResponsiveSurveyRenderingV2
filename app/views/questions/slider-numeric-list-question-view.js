@@ -23,6 +23,14 @@ export default class SliderNumericListQuestionView extends QuestionWithAnswersVi
 
     }
 
+    detach() {
+        super.detach();
+
+        for(let answerCode in this._sliders){
+            this._sliders[answerCode].detach();
+        }
+    }
+
     _generateSliderValues() {
         const values = [];
         const valueStep = 1 / Math.pow(10, this._question.numeric.scale);

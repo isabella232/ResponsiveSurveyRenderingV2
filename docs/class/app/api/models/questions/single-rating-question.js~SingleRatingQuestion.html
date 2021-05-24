@@ -207,7 +207,7 @@
     <td>
       
       
-      <span data-ice="source"> <span><a href="https://github.com/Confirmit/ResponsiveSurveyRendering/tree/master/app/api/models/questions/single-rating-question.js#L67">source</a></span></span>
+      <span data-ice="source"> <span><a href="https://github.com/Confirmit/ResponsiveSurveyRendering/tree/master/app/api/models/questions/single-rating-question.js#L63">source</a></span></span>
     </td>
   </tr>
 <tr data-ice="target">
@@ -224,13 +224,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/app/api/models/questions/single-rating-question.js~SingleRatingQuestion.html#instance-get-nonScaleItems">nonScaleItems</a></span></span><span class="code" data-ice="signature">: <span>object</span></span>
+          <span class="code" data-ice="name"><span><a href="class/app/api/models/questions/single-rating-question.js~SingleRatingQuestion.html#instance-get-nonScaleItems">nonScaleItems</a></span></span><span class="code" data-ice="signature">: <span><span><a href="class/app/api/models/base/answer.js~Answer.html">Answer</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description" class="inline"><p>Array of Scales without a score.</p>
+        <div data-ice="description" class="inline"><p>Answers not in rating scale; If option &quot;Exclude Non-scored&quot; is enabled, it contains only answers without score, Otherwise it&apos;s empty collection.</p>
 </div>
         
       </div>
@@ -255,13 +255,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/app/api/models/questions/single-rating-question.js~SingleRatingQuestion.html#instance-get-scaleItems">scaleItems</a></span></span><span class="code" data-ice="signature">: <span>object</span></span>
+          <span class="code" data-ice="name"><span><a href="class/app/api/models/questions/single-rating-question.js~SingleRatingQuestion.html#instance-get-scaleItems">scaleItems</a></span></span><span class="code" data-ice="signature">: <span><span><a href="class/app/api/models/base/answer.js~Answer.html">Answer</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description" class="inline"><p><code>{&lt;answerCode&gt;: &lt;scaleCode&gt;...}</code></p>
+        <div data-ice="description" class="inline"><p>Answers in rating scale; If option &quot;Exclude Non-scored&quot; is enabled, it contains only answers with score.</p>
 </div>
         
       </div>
@@ -1201,7 +1201,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="https://github.com/Confirmit/ResponsiveSurveyRendering/tree/master/app/api/models/questions/single-rating-question.js#L67">source</a></span></span>
+      <span data-ice="source"><span><a href="https://github.com/Confirmit/ResponsiveSurveyRendering/tree/master/app/api/models/questions/single-rating-question.js#L63">source</a></span></span>
     </span>
   </h3>
 
@@ -1241,7 +1241,7 @@
     
     
     
-    <span class="code" data-ice="name">nonScaleItems</span><span class="code" data-ice="signature">: <span>object</span></span>
+    <span class="code" data-ice="name">nonScaleItems</span><span class="code" data-ice="signature">: <span><span><a href="class/app/api/models/base/answer.js~Answer.html">Answer</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
@@ -1252,7 +1252,7 @@
   
   
   
-  <div data-ice="description"><p>Array of Scales without a score.</p>
+  <div data-ice="description"><p>Answers not in rating scale; If option &quot;Exclude Non-scored&quot; is enabled, it contains only answers without score, Otherwise it&apos;s empty collection.</p>
 </div>
 
   
@@ -1285,7 +1285,7 @@
     
     
     
-    <span class="code" data-ice="name">scaleItems</span><span class="code" data-ice="signature">: <span>object</span></span>
+    <span class="code" data-ice="name">scaleItems</span><span class="code" data-ice="signature">: <span><span><a href="class/app/api/models/base/answer.js~Answer.html">Answer</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
@@ -1296,7 +1296,7 @@
   
   
   
-  <div data-ice="description"><p><code>{&lt;answerCode&gt;: &lt;scaleCode&gt;...}</code></p>
+  <div data-ice="description"><p>Answers in rating scale; If option &quot;Exclude Non-scored&quot; is enabled, it contains only answers with score.</p>
 </div>
 
   

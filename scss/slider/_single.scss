@@ -11,7 +11,9 @@
     padding: 0;
   }
 
-  &__label {
+  &__answer-text {
+    margin-top: calcTopOffsetForAlignment($control-size + 0.2, 1.4em);
+    margin-bottom: calcTopOffsetForAlignment($control-size + 0.2, 1.4em);
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
@@ -19,6 +21,10 @@
     &--selected {
       font-weight: bold;
     }
+  }
+
+  &__answer-other {
+    width: 15em;
   }
 }
 
@@ -36,6 +42,7 @@
   .cf-single-slider-question__label {
     padding: 0 0.125em;
     flex: 1 1 1em;
+    min-width: 1em;
   }
 }
 
@@ -56,6 +63,7 @@
     margin-top: $cf-slider__track-no-value-margin;
     flex-direction: column;
     justify-content: space-around;
+    min-width: 1px
   }
 
   .cf-single-slider-question__label {
