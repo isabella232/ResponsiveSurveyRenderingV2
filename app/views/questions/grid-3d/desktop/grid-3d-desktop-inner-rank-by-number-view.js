@@ -1,9 +1,12 @@
 import Grid3DDesktopInnerQuestionView from './grid-3d-desktop-inner-question-view';
 import ErrorBlockManager from '../../../error/error-block-manager';
+import MultiCountHelper from '../../../helpers/multi-count-helper';
 
 export default class Grid3DDesktopInnerRankByNumberQuestionView extends Grid3DDesktopInnerQuestionView {
     constructor(parentQuestion, question, settings = null) {
         super(parentQuestion, question, settings);
+
+        this._disabledAnswerClass = 'cf-grid-3d-desktop__numeric-control--disabled';
 
         this._answerErrorBlockManager = new ErrorBlockManager();
         this._nanCode = 'NOT_A_NUMBER';
@@ -26,6 +29,21 @@ export default class Grid3DDesktopInnerRankByNumberQuestionView extends Grid3DDe
         this._question.answers.forEach(answer => {
             const answerInput = this._getAnswerNode(answer.code);
             const value = this._question.values[answer.code] || '';
+
+            if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+                const answerNode  = this._getAnswerNode(answer.code);
+                const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                    Object.values(this._question.values).length,
+                    this._question.multiCount
+                );
+                if (isMaxMultiCountReached && !value) {
+                    answerNode.addClass(this._disabledAnswerClass);
+                } else {
+                    answerNode.removeClass(this._disabledAnswerClass);
+                }
+
+                answerInput.attr('disabled', isMaxMultiCountReached && !value);
+            }
 
             if (value === this._nanCode) {
                 return;

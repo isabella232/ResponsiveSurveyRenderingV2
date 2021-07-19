@@ -56,17 +56,22 @@ export default class RankByNumberQuestionView extends QuestionWithAnswersView {
 
         this._question.answers.forEach(answer => {
             const value = this._question.values[answer.code];
-
-            const answerNode  = this._getAnswerNode(answer.code);
-            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(Object.values(this._question.values).length, this._question.multiCount);
-            if (isMaxMultiCountReached && !value) {
-                answerNode.addClass(this._disabledAnswerClass);
-            } else {
-                answerNode.removeClass(this._disabledAnswerClass);
-            }
-
             const answerInput = this._getAnswerInputNode(answer.code);
-            answerInput.attr('disabled', isMaxMultiCountReached && !value);
+
+            if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+                const answerNode  = this._getAnswerNode(answer.code);
+                const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                    Object.values(this._question.values).length,
+                    this._question.multiCount
+                );
+                if (isMaxMultiCountReached && !value) {
+                    answerNode.addClass(this._disabledAnswerClass);
+                } else {
+                    answerNode.removeClass(this._disabledAnswerClass);
+                }
+
+                answerInput.attr('disabled', isMaxMultiCountReached && !value);
+            }
 
             if (value === this._nanCode) {
                 return;
@@ -81,11 +86,16 @@ export default class RankByNumberQuestionView extends QuestionWithAnswersView {
     _updateAnswerOtherNodes(changes) {
         super._updateAnswerOtherNodes(changes);
 
-        const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(Object.values(this._question.values).length, this._question.multiCount);
-        this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-            const answerOtherNode = this._getAnswerOtherNode(answer.code);
-            answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
-        });
+        if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                Object.values(this._question.values).length,
+                this._question.multiCount
+            );
+            this._question.answers.filter(answer => answer.isOther).forEach(answer => {
+                const answerOtherNode = this._getAnswerOtherNode(answer.code);
+                answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
+            });
+        }
     }
 
     _onModelValueChange({changes}) {

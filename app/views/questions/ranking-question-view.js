@@ -133,20 +133,21 @@ export default class RankingQuestionView extends QuestionWithAnswersView {
     _updateAnswerOtherNodes({values = [], otherValues = []}) {
         if (values.length > 0) {
             this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-                this._getAnswerOtherNode(answer.code)
-                    .attr('tabindex', '-1')
-                    .attr('aria-hidden', 'true')
-                    .attr('disabled', MultiCountHelper.isMaxMultiCountReached(Object.values(this._question.values).length, this._question.multiCount));
-            });
+                const isSelected = this._isSelected(answer);
 
-            Object.keys(this._question.values)
-                .filter(answerCode => this._question.getAnswer(answerCode).isOther)
-                .forEach(answerCode => {
-                    this._getAnswerOtherNode(answerCode)
-                        .attr('tabindex', '0')
-                        .attr('aria-hidden', 'false')
-                        .attr('disabled', null);
-                });
+                const answerOtherNode = this._getAnswerOtherNode(answer.code);
+                answerOtherNode
+                    .attr('tabindex', isSelected ? '0' : '-1')
+                    .attr('aria-hidden', isSelected ? 'false' : 'true');
+
+                if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+                    const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                        Object.values(this._question.values).length,
+                        this._question.multiCount
+                    );
+                    answerOtherNode.attr('disabled', isMaxMultiCountReached && !isSelected);
+                }
+            });
         }
 
         super._updateAnswerOtherNodes({otherValues});

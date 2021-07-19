@@ -122,11 +122,19 @@ export default class SearchableMultiQuestionView extends StoredOtherValuesMixin(
     _updateAnswerOtherNodes(changes) {
         super._updateAnswerOtherNodes(changes);
 
-        this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-            const answerOtherNode = this._getAnswerOtherNode(answer.code);
-            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(this._question.values.length, this._question.multiCount);
-            answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
-        });
+        if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+            this._question.answers
+                .filter(answer => answer.isOther)
+                .forEach(answer => {
+                    const answerOtherNode = this._getAnswerOtherNode(answer.code);
+
+                    const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                        this._question.values.length,
+                        this._question.multiCount
+                    );
+                    answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
+                });
+        }
     }
 
     _isSelected(answer) {

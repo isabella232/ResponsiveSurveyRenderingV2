@@ -750,6 +750,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "app/api/models/base/scale.js~scale#score",
+    "class/app/api/models/base/scale.js~Scale.html#instance-get-score",
+    "app/api/models/base/scale.js~Scale#score",
+    "member"
+  ],
+  [
     "app/api/models/base/scale.js~scale#text",
     "class/app/api/models/base/scale.js~Scale.html#instance-get-text",
     "app/api/models/base/scale.js~Scale#text",

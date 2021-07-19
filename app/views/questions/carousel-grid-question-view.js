@@ -60,8 +60,10 @@ export default class CarouselGridQuestionView extends QuestionWithAnswersView {
         this.answers.forEach((answer, answerIndex) => {
             this._scales.forEach((scale, scaleIndex) => {
                 this._getScaleNode(answer.code, scale.code)
-                    .click(() => this._onScaleNodeClick(answer, scale))
-                    .on('focus', this._onScaleNodeFocus.bind(this, answerIndex, scaleIndex))
+                    .click(() => this._onScaleNodeClick(answer, scale));
+                this._getScaleControlNode(answer.code, scale.code)
+                    .on('focus', this._onScaleControlNodeFocus.bind(this, answerIndex, scaleIndex))
+
             });
 
             if (answer.isOther) {
@@ -83,8 +85,8 @@ export default class CarouselGridQuestionView extends QuestionWithAnswersView {
                 }
 
                 this._scales.forEach(scale => {
-                    this._getScaleNode(answer.code, scale.code)
-                        .on('keydown', this._onScaleNodeKeyDown.bind(this));
+                    this._getScaleControlNode(answer.code, scale.code)
+                        .on('keydown', this._onScaleControlNodeKeyDown.bind(this));
                 });
             });
         }
@@ -283,7 +285,7 @@ export default class CarouselGridQuestionView extends QuestionWithAnswersView {
         }
     }
 
-    _onScaleNodeFocus(answerIndex, scaleIndex) {
+    _onScaleControlNodeFocus(answerIndex, scaleIndex) {
         this._currentAnswerIndex = answerIndex;
         this._currentScaleIndex = scaleIndex;
     }
@@ -303,7 +305,7 @@ export default class CarouselGridQuestionView extends QuestionWithAnswersView {
 
         const isLastAnswer = this._currentAnswerIndex === this._answers.length - 1;
         const nextButtonIsFocused = activeElement.classList.contains('cf-carousel__navigation-button--next');
-        const scaleItemIsFocused = activeElement.classList.contains('cf-list__item');
+        const scaleItemIsFocused = activeElement.classList.contains('cf-button');
 
 
         if (isLastAnswer && nextButtonIsFocused && this._currentAnswer.isOther) {
@@ -358,10 +360,10 @@ export default class CarouselGridQuestionView extends QuestionWithAnswersView {
         }
 
         this._selectScale(this._currentAnswer, nextScale);
-        this._getScaleNode(this._currentAnswer.code, nextScale.code).focus();
+        this._getScaleControlNode(this._currentAnswer.code, nextScale.code).focus();
     }
 
-    _onScaleNodeKeyDown(event) {
+    _onScaleControlNodeKeyDown(event) {
         if ([KEYS.SpaceBar, KEYS.Enter].includes(event.keyCode) === false) {
             return;
         }

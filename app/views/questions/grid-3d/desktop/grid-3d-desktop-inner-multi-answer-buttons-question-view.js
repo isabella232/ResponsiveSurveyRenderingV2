@@ -12,6 +12,10 @@ export default class Grid3DDesktopInnerMultiAnswerButtonsQuestionView extends Gr
         return 'cf-button-answer--selected';
     }
 
+    _getDisabledAnswerClass() {
+        return 'cf-button-answer--disabled';
+    }
+
     _getSelectedControlClass() {
         return 'cf-button--selected';
     }

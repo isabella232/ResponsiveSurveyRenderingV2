@@ -1,4 +1,4 @@
-import AnswerImagesSettings from "./answer-images-settings";
+import AnswerImagesSettings from './answer-images-settings';
 
 /**
  * @desc A class for Scale
@@ -11,6 +11,7 @@ export default class Scale {
      */
     constructor(model, group) {
         this._code = null;
+        this._score = null;
         this._text = null;
         this._imagesSettings = null;
         this._backgroundColor = null;
@@ -29,6 +30,15 @@ export default class Scale {
     }
 
     /**
+     * Scale score.
+     * @type {number}
+     * @readonly
+     */
+    get score() {
+        return this._score;
+    }
+
+    /**
      * Answer text.
      * @type {string}
      * @readonly
@@ -42,7 +52,7 @@ export default class Scale {
      * @type {HeadGroup}
      * @readonly
      */
-    get group () {
+    get group() {
         return this._group;
     }
 
@@ -51,7 +61,7 @@ export default class Scale {
      * @type {AnswerImagesSetting}
      * @readonly
      */
-    get imagesSettings(){
+    get imagesSettings() {
         return this._imagesSettings;
     }
 
@@ -64,12 +74,12 @@ export default class Scale {
         return this._backgroundColor;
     }
 
-    _parseModel(model)
-    {
+    _parseModel(model) {
         this._text = model.text;
         this._code = model.code;
+        this._score = model.score;
         this._backgroundColor = model.backgroundColor;
-        if(model.imagesSettings){
+        if (model.imagesSettings) {
             this._imagesSettings = new AnswerImagesSettings(model.imagesSettings);
         }
     }

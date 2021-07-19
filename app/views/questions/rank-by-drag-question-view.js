@@ -106,11 +106,16 @@ export default class RankByDragQuestionView extends QuestionWithAnswersView {
     _updateAnswerOtherNodes(changes) {
         super._updateAnswerOtherNodes(changes);
 
-        const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(Object.values(this._question.values).length, this._question.multiCount);
-        this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-            const answerOtherNode = this._getAnswerOtherNode(answer.code);
-            answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
-        });
+        if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                Object.values(this._question.values).length,
+                this._question.multiCount
+            );
+            this._question.answers.filter(answer => answer.isOther).forEach(answer => {
+                const answerOtherNode = this._getAnswerOtherNode(answer.code);
+                answerOtherNode.attr('disabled', isMaxMultiCountReached && !this._question.values[answer.code]);
+            });
+        }
     }
 
     _syncRankedListToModel() {

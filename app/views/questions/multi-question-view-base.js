@@ -113,6 +113,10 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
             return 'cf-image-answer--disabled';
         }
 
+        if (this._question.answerButtons) {
+            return 'cf-button-answer--disabled';
+        }
+
         return 'cf-checkbox-answer--disabled';
     }
 
@@ -159,21 +163,24 @@ export default class MultiQuestionViewBase extends QuestionWithAnswersView {
 
     _updateAnswerOtherNodes({values = [], otherValues = []}) {
         if (values.length > 0) {
-            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(this._getSelectedAnswerCodes().length, this._question.multiCount);
-            this._question.answers.filter(answer => answer.isOther).forEach(answer => {
-                this._getAnswerOtherNode(answer.code)
-                    .attr('tabindex', '-1')
-                    .attr('aria-hidden', 'true')
-                    .attr('disabled', isMaxMultiCountReached);
-            });
+            const isMaxMultiCountReached = MultiCountHelper.isMaxMultiCountReached(
+                this._getSelectedAnswerCodes().length,
+                this._question.multiCount
+            );
 
-            this._getSelectedAnswerCodes()
-                .filter(answerCode => this._question.getAnswer(answerCode).isOther)
-                .forEach(answerCode => {
-                    this._getAnswerOtherNode(answerCode)
-                        .attr('tabindex', '0')
-                        .attr('aria-hidden', 'false')
-                        .attr('disabled', null);
+            this._question.answers
+                .filter((answer) => answer.isOther)
+                .forEach((answer) => {
+                    const isSelected = this._isSelected(answer);
+
+                    const answerOtherNode = this._getAnswerOtherNode(answer.code);
+                    answerOtherNode
+                        .attr('tabindex', isSelected ? '0' : '-1')
+                        .attr('aria-hidden', isSelected ? 'false' : 'true');
+
+                    if (MultiCountHelper.isMultiCountSet(this._question.multiCount)) {
+                        answerOtherNode.attr('disabled', isMaxMultiCountReached && !isSelected);
+                    }
                 });
         }
 
