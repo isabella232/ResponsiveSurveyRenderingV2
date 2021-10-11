@@ -16,6 +16,15 @@ export default class TestNavigatorQuestion{
     }
 
     /**
+     * Question entity id.
+     * @type {string}
+     * @readonly
+     */
+    get entityId() {
+        return this._question.entityId !== undefined ? this._question.entityId : '';
+    }
+
+    /**
      * Question title.
      * @type {string}
      * @readonly

@@ -11,7 +11,8 @@ export default class QuestionViewSettings {
         this._isAccessible = surveyInfo.isAccessible;
         this._messages = {
             noResponse: surveyInfo.messages.noResponseMessage,
-        }
+        };
+        this._renderingVersion = surveyInfo.renderingVersion;
     }
 
     /**
@@ -36,7 +37,7 @@ export default class QuestionViewSettings {
      * @param {boolean} value
      */
     set disableKeyboardSupport(value) {
-        this._disableKeyboardSupport = value
+        this._disableKeyboardSupport = value;
     }
 
     /**
@@ -54,5 +55,14 @@ export default class QuestionViewSettings {
      */
     get messages() {
         return this._messages;
+    }
+
+    /**
+     * Survey rendering version
+     * @type {string}
+     * @readonly
+     */
+    get renderingVersion() {
+        return this._renderingVersion;
     }
 }

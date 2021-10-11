@@ -1,11 +1,11 @@
-import QuestionWithAnswersView from "./base/question-with-answers-view";
-import Accordion from "./../controls/accordion";
-import CollapsingPanel from "../controls/collapsing-panel";
-import Utils from "../../utils";
-import questionHelper from "../helpers/question-helper";
-import $ from "jquery";
-import KEYS from "../helpers/keyboard-keys";
-import ValidationTypes from "../../api/models/validation/validation-types";
+import QuestionWithAnswersView from './base/question-with-answers-view';
+import Accordion from './../controls/accordion';
+import CollapsingPanel from '../controls/collapsing-panel';
+import Utils from '../../utils';
+import questionHelper from '../helpers/question-helper';
+import $ from 'jquery';
+import KEYS from '../helpers/keyboard-keys';
+import ValidationTypes from '../../api/models/validation/validation-types';
 
 export default class AccordionGridQuestionView extends QuestionWithAnswersView {
     constructor(question, settings) {
@@ -14,12 +14,14 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
         this._currentAnswerIndex = null;
         this._currentScaleIndex = null;
 
-        this._accordion = new Accordion(this.answers.map(answer =>
-            new CollapsingPanel(this._getAnswerNode(answer.code).find('.cf-collapsing-panel'))
-        ));
+        this._accordion = new Accordion(
+            this.answers.map(
+                (answer) => new CollapsingPanel(this._getAnswerNode(answer.code).find('.cf-collapsing-panel'))
+            )
+        );
 
-        this._selectedControlCssClass = "cf-radio--selected";
-        this._selectedAnswerCssClass = "cf-radio-answer--selected";
+        this._selectedControlCssClass = 'cf-radio--selected';
+        this._selectedAnswerCssClass = 'cf-radio-answer--selected';
         this._init();
     }
 
@@ -58,55 +60,59 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
     _attachControlHandlers() {
         this.answers.forEach((answer, answerIndex) => {
             this._question.scales.forEach((scale, scaleIndex) => {
-                this._getScaleNode(answer.code, scale.code)
-                    .on('click', this._onScaleNodeClick.bind(this, answer, scale))
-                    .on('focus', this._onScaleNodeFocus.bind(this, answerIndex, scaleIndex));
+                this._getScaleNode(answer.code, scale.code).on(
+                    'click',
+                    this._onScaleNodeClick.bind(this, answer, scale)
+                );
+                this._getScaleControlNode(answer.code, scale.code).on(
+                    'focus',
+                    this._onScaleControlNodeFocus.bind(this, answerIndex, scaleIndex)
+                );
             });
 
             if (answer.isOther) {
                 this._getAnswerOtherNode(answer.code)
-                    .on('input', event => this._onAnswerOtherValueChange(answer.code, event.target.value))
-                    .on('click', event => event.stopPropagation());
+                    .on('input', (event) => this._onAnswerOtherValueChange(answer.code, event.target.value))
+                    .on('click', (event) => event.stopPropagation());
             }
         });
 
-        this._accordion.panels.forEach((item, index) => item.toggleEvent.on(() => this._onCollapsingPanelsToggle(item, index)));
+        this._accordion.panels.forEach((item, index) =>
+            item.toggleEvent.on(() => this._onCollapsingPanelsToggle(item, index))
+        );
 
         if (!this._settings.disableKeyboardSupport) {
             this.answers.forEach((answer, answerIndex) => {
-                this._getAnswerTitleNode(answer.code)
-                    .on('keydown', this._onAnswerTitleKeyDown.bind(this, answerIndex));
+                this._getAnswerTitleNode(answer.code).on('keydown', this._onAnswerTitleKeyDown.bind(this, answerIndex));
 
-                this._getScaleGroupNode(answer.code)
-                    .on('keydown', this._onGroupNodeKeyDown.bind(this));
+                this._getScaleGroupNode(answer.code).on('keydown', this._onGroupNodeKeyDown.bind(this));
 
                 if (answer.isOther) {
-                    this._getAnswerOtherNode(answer.code).on('keydown', event =>
-                        this._onAnswerOtherNodeKeyDown(event, answer, answerIndex));
+                    this._getAnswerOtherNode(answer.code).on('keydown', (event) =>
+                        this._onAnswerOtherNodeKeyDown(event, answer, answerIndex)
+                    );
                 }
 
-                this._scales.forEach(scale => {
-                    this._getScaleNode(answer.code, scale.code)
-                        .on('keydown', this._onScaleNodeKeyDown.bind(this));
+                this._scales.forEach((scale) => {
+                    this._getScaleNode(answer.code, scale.code).on('keydown', this._onScaleNodeKeyDown.bind(this));
                 });
             });
         }
     }
 
-    _updateAnswerScaleNodes({values = []}) {
+    _updateAnswerScaleNodes({ values = [] }) {
         if (values.length === 0) {
             return;
         }
 
-        values.forEach(answerCode => {
-            this._scales.forEach(scale => {
+        values.forEach((answerCode) => {
+            this._scales.forEach((scale) => {
                 this._clearScaleNode(answerCode, scale.code);
             });
 
             const scaleCode = this._question.values[answerCode];
             if (scaleCode === undefined) {
-                this._getScaleControlNode(answerCode, this._scales[0].code)
-                    .attr('tabindex', '0');
+                this._getScaleControlNode(answerCode, this._scales[0].code).attr('tabindex', '0');
             } else {
                 this._selectScaleNode(answerCode, scaleCode);
             }
@@ -114,38 +120,33 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
     }
 
     _clearScaleNode(answerCode, scaleCode) {
-        this._getScaleControlNode(answerCode,scaleCode)
+        this._getScaleControlNode(answerCode, scaleCode)
             .removeClass(this._selectedControlCssClass)
             .attr('aria-checked', 'false')
             .attr('tabindex', '-1')
             .css('background-color', '')
             .css('border-color', '');
 
-        this._getScaleNode(answerCode, scaleCode)
-            .removeClass(this._selectedAnswerCssClass)
+        this._getScaleNode(answerCode, scaleCode).removeClass(this._selectedAnswerCssClass);
     }
 
     _selectScaleNode(answerCode, scaleCode) {
-        const controlNode = this._getScaleControlNode(answerCode,scaleCode)
+        const controlNode = this._getScaleControlNode(answerCode, scaleCode);
 
-        controlNode
-            .addClass(this._selectedControlCssClass)
-            .attr('aria-checked', 'true')
-            .attr('tabindex', '0');
+        controlNode.addClass(this._selectedControlCssClass).attr('aria-checked', 'true').attr('tabindex', '0');
 
-        this._getScaleNode(answerCode, scaleCode)
-            .addClass(this._selectedAnswerCssClass)
+        this._getScaleNode(answerCode, scaleCode).addClass(this._selectedAnswerCssClass);
 
         const scale = this._question.getScale(scaleCode);
 
         if (scale.backgroundColor !== null) {
-            controlNode.css({backgroundColor: scale.backgroundColor, borderColor: scale.backgroundColor});
+            controlNode.css({ backgroundColor: scale.backgroundColor, borderColor: scale.backgroundColor });
         }
     }
 
     _openNextPanel() {
         const openPanelIndex = this._accordion.getOpenPanelIndex();
-        if(openPanelIndex === -1){
+        if (openPanelIndex === -1) {
             return;
         }
 
@@ -158,13 +159,13 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
         this._getAnswerTitleNode(this._question.answers[openPanelIndex + 1].code).focus();
     }
 
-    _updateSelectedAnswers({values = []}) {
+    _updateSelectedAnswers({ values = [] }) {
         if (values.length === 0) {
             return;
         }
 
         this._container.find('.cf-accordion-grid-answer__selected-list').empty();
-        Object.keys(this._question.values).forEach(answerCode => {
+        Object.keys(this._question.values).forEach((answerCode) => {
             const scaleCode = this._question.values[answerCode];
             const scale = this._question.getScale(scaleCode);
             this._getAnswerSelectedScalesListNode(answerCode).append(this._createAnswerSelectedScalesItemNode(scale));
@@ -185,10 +186,10 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
             ? this._getAnswerOtherNode(answer.code)
             : this._getAnswerTextNode(answer.code);
         const errorBlockId = this._getAnswerErrorBlockId(answer.code);
-        const errors = validationResult.errors.map(error => error.message);
+        const errors = validationResult.errors.map((error) => error.message);
         this._answerErrorBlockManager.showErrors(errorBlockId, targetNode, errors);
 
-        const otherErrors = validationResult.errors.filter(error => error.type === ValidationTypes.OtherRequired);
+        const otherErrors = validationResult.errors.filter((error) => error.type === ValidationTypes.OtherRequired);
         if (otherErrors.length > 0) {
             this._getAnswerOtherNode(validationResult.answerCode)
                 .attr('aria-errormessage', errorBlockId)
@@ -197,45 +198,38 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
 
         const answerHasNotOnlyOtherErrors = validationResult.errors.length > otherErrors.length;
         if (answerHasNotOnlyOtherErrors) {
-            this._getScaleGroupNode(answer.code)
-                .attr("aria-invalid", "true")
-                .attr("aria-errormessage", errorBlockId);
+            this._getScaleGroupNode(answer.code).attr('aria-invalid', 'true').attr('aria-errormessage', errorBlockId);
         }
     }
 
     _hideErrors() {
         super._hideErrors();
 
-        this.answers.forEach(answer => {
-            this._getScaleGroupNode(answer.code)
-                .removeAttr("aria-invalid")
-                .removeAttr("aria-errormessage");
+        this.answers.forEach((answer) => {
+            this._getScaleGroupNode(answer.code).removeAttr('aria-invalid').removeAttr('aria-errormessage');
         });
 
-
-        this._container.find('.cf-text-box')
-            .removeAttr('aria-errormessage')
-            .removeAttr('aria-invalid');
+        this._container.find('.cf-text-box').removeAttr('aria-errormessage').removeAttr('aria-invalid');
     }
 
     _createAnswerSelectedScalesItemNode(scale) {
         const node = $(`<div class="cf-accordion-grid-answer__selected-item">${scale.text}</div>`);
 
         if (scale.backgroundColor) {
-            node.css({color: scale.backgroundColor});
+            node.css({ color: scale.backgroundColor });
         }
 
         return node;
     }
 
-    _onModelValueChange({changes}) {
+    _onModelValueChange({ changes }) {
         this._updateAnswerScaleNodes(changes);
         this._updateAnswerOtherNodes(changes);
         this._updateSelectedAnswers(changes);
 
         if (changes.values !== undefined) {
             const openPanelIndex = this._accordion.getOpenPanelIndex();
-            if(questionHelper.isAnswerComplete(this._question, this._question.answers[openPanelIndex])) {
+            if (questionHelper.isAnswerComplete(this._question, this._question.answers[openPanelIndex])) {
                 this._openNextPanel();
             }
         }
@@ -245,7 +239,7 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
         this._selectScale(answer, scale);
     }
 
-    _onScaleNodeFocus(answerIndex, scaleIndex) {
+    _onScaleControlNodeFocus(answerIndex, scaleIndex) {
         this._currentAnswerIndex = answerIndex;
         this._currentScaleIndex = scaleIndex;
     }
@@ -329,7 +323,7 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
 
         if (event.keyCode === KEYS.Enter) {
             const openPanelIndex = this._accordion.getOpenPanelIndex();
-            if(questionHelper.isAnswerComplete(this._question, this._question.answers[openPanelIndex])) {
+            if (questionHelper.isAnswerComplete(this._question, this._question.answers[openPanelIndex])) {
                 this._openNextPanel();
             }
         }
@@ -337,7 +331,7 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
 
     _onCollapsingPanelsToggle(panel, index) {
         const answerCode = this._question.answers[index].code;
-        if(panel.isOpen) {
+        if (panel.isOpen) {
             this._getAnswerTitleNode(answerCode).attr('aria-expanded', 'true');
             this._getAnswerContentNode(answerCode).attr('aria-hidden', 'false');
             this._getAnswerSelectedScalesListNode(answerCode)
@@ -345,7 +339,7 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
                 .addClass('cf-accordion-grid-answer__selected-list--hidden');
 
             const scaleCode = this._question.values[answerCode];
-            if(scaleCode !== undefined) {
+            if (scaleCode !== undefined) {
                 this._getScaleControlNode(answerCode, scaleCode).attr('tabindex', '0');
             } else {
                 this._getScaleControlNode(answerCode, this._scales[0].code).attr('tabindex', '0');
@@ -357,7 +351,7 @@ export default class AccordionGridQuestionView extends QuestionWithAnswersView {
                 .attr('aria-hidden', 'false')
                 .removeClass('cf-accordion-grid-answer__selected-list--hidden');
 
-            this._scales.forEach(scale => {
+            this._scales.forEach((scale) => {
                 this._getScaleControlNode(answerCode, scale.code).attr('tabindex', '-1');
             });
         }

@@ -6,7 +6,8 @@ import TestNavigatorQuestion from './test-navigator-question';
 export default class TestNavigator {
     constructor(model) {
         this._questions = model.questions.map(question => new TestNavigatorQuestion(question));
-        this._currentQuestionId =  model.currentQuestionId;
+        this._currentQuestionId = model.currentQuestionId;
+        this._extQuicktestCommentsEnabled = model.extQuicktestCommentsEnabled;
     }
 
     /**
@@ -25,5 +26,14 @@ export default class TestNavigator {
      */
     get currentQuestionId() {
         return this._currentQuestionId;
+    }
+
+    /**
+     * Whether or not ExtQuicktestComments feature toggle is enabled.
+     * @type {boolean}
+     * @readonly
+     */
+    get extQuicktestCommentsEnabled() {
+        return this._extQuicktestCommentsEnabled;
     }
 }

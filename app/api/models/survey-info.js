@@ -3,6 +3,7 @@
  */
 export default class SurveyInfo {
     constructor(rawSurveyInfo) {
+        this._surveyId = rawSurveyInfo.surveyId;
         this._isTest = rawSurveyInfo.isTest;
         this._isAccessible = rawSurveyInfo.isAccessible;
         this._surveyChannel = rawSurveyInfo.surveyChannel;
@@ -15,6 +16,16 @@ export default class SurveyInfo {
         this._allowNextNavigation = rawSurveyInfo.allowNextNavigation;
         this._allowBackNavigation = rawSurveyInfo.allowBackNavigation;
         this._disableValidationBanner = rawSurveyInfo.disableValidationBanner;
+        this._renderingVersion = rawSurveyInfo.renderingVersion;
+    }
+
+    /**
+     * Survey id.
+     * @type {string}
+     * @readonly
+     */
+    get surveyId() {
+        return this._surveyId;
     }
 
     /**
@@ -49,7 +60,7 @@ export default class SurveyInfo {
      * @type {bool}
      * @readonly
      */
-    get autoNext(){
+    get autoNext() {
         return this._autoNext;
     }
 
@@ -58,7 +69,7 @@ export default class SurveyInfo {
      * @type {?number}
      * @readonly
      */
-    get autoNextInterval(){
+    get autoNextInterval() {
         return this._autoNextInterval;
     }
 
@@ -94,7 +105,7 @@ export default class SurveyInfo {
      * @returns {object} Dictionary of messages.
      */
     get messages() {
-        return {...this._messages};
+        return { ...this._messages };
     }
 
     /**
@@ -114,6 +125,7 @@ export default class SurveyInfo {
     get allowBackNavigation() {
         return this._allowBackNavigation;
     }
+
     /**
      * is disable toaster
      * @type {bool}
@@ -121,5 +133,14 @@ export default class SurveyInfo {
      */
     get disableValidationBanner() {
         return this._disableValidationBanner;
+    }
+
+    /**
+     * Survey rendering version
+     * @type {string}
+     * @readonly
+     */
+    get renderingVersion() {
+        return this._renderingVersion;
     }
 }
